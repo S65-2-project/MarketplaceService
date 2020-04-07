@@ -7,10 +7,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["marketplaceservice/marketplaceservice.csproj", "marketplaceservice/"]
-RUN dotnet restore "marketplaceservice/marketplaceservice.csproj"
+COPY ["marketplaceservice.csproj", "./"]
+RUN dotnet restore "marketplaceservice.csproj"
 COPY . .
-WORKDIR "/src/marketplaceservice"
 RUN dotnet build "marketplaceservice.csproj" -c Release -o /app/build
 
 FROM build AS publish
