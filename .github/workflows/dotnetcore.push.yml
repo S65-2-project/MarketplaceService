@@ -3,6 +3,8 @@ name: .NET Core
 on:
   push:
     branches:
+      - '*'         # matches every branch
+      - '*/*'       # matches every branch containing a single '/'
       - '!master'
       - '!develop'
 
