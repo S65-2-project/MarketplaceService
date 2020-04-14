@@ -1,21 +1,20 @@
 name: .NET Core
 
-on: [push]
+on:
+  push:
+    branches:
+      - '!master'
+      - '!develop'
 
 jobs:
   build:
-    name: build and test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+    name: build and test on ubuntu-18.04
+    runs-on: ubuntu-18.04
+    container:
+      image: mcr.microsoft.com/dotnet/core/sdk:3.1.201-bionic
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.201
       - name: Install dependencies
         run: dotnet restore
       - name: Build
