@@ -2,11 +2,18 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>2145df81-9941-4fef-bc85-93ddde474a1f</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
       <PackageReference Include="MongoDB.Bson" Version="2.10.2" />
       <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="..\.dockerignore" />
     </ItemGroup>
 
 
