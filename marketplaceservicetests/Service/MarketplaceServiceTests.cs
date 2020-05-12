@@ -71,8 +71,83 @@ namespace marketplaceservicetests.Service
             
             Assert.NotNull(result);
             Assert.IsType<ArgumentException>(result);
-            //Assert.NotEqual(product.Title, result.Title);
-            //Assert.NotEqual(product.Description, result.Description);
+        }
+
+        [Fact]
+        public async Task UpdateProduct_Success()
+        {
+            const string titleText = "Title Text";
+            const string descriptionText = "Description Text";
+            var id = Guid.NewGuid();
+            
+            var product = new Product()
+            {
+                Id = id,
+                Title = titleText,
+                Description = descriptionText
+            };
+
+            var updatedProduct = new Product()
+            {
+                Id = id,
+                Title = "New Title",
+                Description = "New Description"
+            };
+            
+            var updateProductModel = new UpdateProductModel()
+            {
+                Title = updatedProduct.Title,
+                Description = updatedProduct.Description
+            };
+
+            _repository.Setup(x => x.GetProduct(id)).ReturnsAsync(product);
+            _repository.Setup(x => 
+                    x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
+
+            var result = await _marketplaceService.UpdateProduct(product.Id, updateProductModel);
+            
+            Assert.NotNull(result);
+            Assert.Equal(updatedProduct, result);
+            Assert.NotEqual(titleText, result.Description);
+            Assert.NotEqual(descriptionText, result.Title);
+        }
+        
+        [Fact]
+        public async Task UpdateProduct_EmptyTitleFailed()
+        {
+            const string titleText = "Title Text";
+            const string descriptionText = "Description Text";
+            var id = Guid.NewGuid();
+            
+            var product = new Product()
+            {
+                Id = id,
+                Title = titleText,
+                Description = descriptionText
+            };
+
+            var updatedProduct = new Product()
+            {
+                Id = id,
+                Title = "",
+                Description = "New Description"
+            };
+            
+            var updateProductModel = new UpdateProductModel()
+            {
+                Title = updatedProduct.Title,
+                Description = updatedProduct.Description
+            };
+
+            _repository.Setup(x => x.GetProduct(id)).ReturnsAsync(product);
+            _repository.Setup(x => 
+                x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
+
+            var result = await Assert.ThrowsAsync<ArgumentException>(() =>
+                _marketplaceService.UpdateProduct(product.Id, updateProductModel));
+            
+            Assert.NotNull(result);
+            Assert.IsType<ArgumentException>(result);
         }
     }
 }
