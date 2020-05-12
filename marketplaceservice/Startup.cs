@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using marketplaceservice.DatastoreSettings;
+using marketplaceservice.Repositories;
+using marketplaceservice.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace marketplaceservice
 {
@@ -25,6 +29,14 @@ namespace marketplaceservice
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //DatabaseSettings
+            services.AddSingleton<IMarketplaceDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<MarketplaceDatabaseSettings>>().Value);
+            //Repositories
+            services.AddTransient<IMarketplaceRepository, MarketplaceRepository>();
+            //Services
+            services.AddTransient<IMarketplaceService, MarketplaceService>();
+            //Controllers
             services.AddControllers();
         }
 
@@ -35,7 +47,7 @@ namespace marketplaceservice
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
