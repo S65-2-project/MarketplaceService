@@ -22,7 +22,7 @@ namespace marketplaceservicetests.Controller
         }
 
         [Fact]
-        public async Task CreateProductSuccess()
+        public async Task CreateProduct_Success()
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";

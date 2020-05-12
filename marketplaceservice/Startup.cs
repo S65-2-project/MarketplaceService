@@ -30,8 +30,11 @@ namespace marketplaceservice
         public void ConfigureServices(IServiceCollection services)
         {
             //DatabaseSettings
+            services.Configure<MarketplaceDatabaseSettings>(
+                Configuration.GetSection(nameof(MarketplaceDatabaseSettings)));
             services.AddSingleton<IMarketplaceDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<MarketplaceDatabaseSettings>>().Value);
+            
             //Repositories
             services.AddTransient<IMarketplaceRepository, MarketplaceRepository>();
             //Services
