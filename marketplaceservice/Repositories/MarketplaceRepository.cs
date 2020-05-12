@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using marketplaceservice.DatastoreSettings;
 using marketplaceservice.Domain;
@@ -23,6 +24,9 @@ namespace marketplaceservice.Repositories
         public async Task<Product> CreateProduct(Product product) {
             await _products.InsertOneAsync(product); return product;
         }
+
+        public async Task<List<Product>> GetAll() =>
+            await _products.Find(_ => true).ToListAsync();
 
         public async Task<Product> GetProduct(Guid id) =>
             await _products.Find(f => f.Id == id).FirstOrDefaultAsync();

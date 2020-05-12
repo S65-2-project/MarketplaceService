@@ -9,11 +9,12 @@ namespace marketplaceservicetests.Repository
 {
     public class MarketplaceRepositoryTests
     {
-        private readonly MongoDbRunner _mongoDbRunner = MongoDbRunner.Start();
+        private readonly MongoDbRunner _mongoDbRunner;
         private readonly IMarketplaceRepository _marketplaceRepository;
 
         public MarketplaceRepositoryTests()
         {
+            _mongoDbRunner = MongoDbRunner.Start();
             var settings = new MarketplaceDatabaseSettings()
             {
                 ConnectionString = _mongoDbRunner.ConnectionString,
