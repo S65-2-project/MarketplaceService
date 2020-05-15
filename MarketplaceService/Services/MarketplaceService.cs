@@ -17,10 +17,10 @@ namespace marketplaceservice.Services
 
         public async Task<Product> CreateProduct(CreateProductModel createProductModel)
         {
-            if(string.IsNullOrEmpty(createProductModel.Title) || string.IsNullOrEmpty(createProductModel.Description))
+            if (string.IsNullOrEmpty(createProductModel.Title) || string.IsNullOrEmpty(createProductModel.Description))
                 throw new ArgumentException("All fields have to be filled out.");
 
-            var productIn = new Product()
+            var productIn = new Product
             {
                 Id = Guid.NewGuid(),
                 Title = createProductModel.Title,
@@ -38,16 +38,14 @@ namespace marketplaceservice.Services
         public async Task<Product> UpdateProduct(Guid id, UpdateProductModel updateProductModel)
         {
             if (string.IsNullOrEmpty(updateProductModel.Title) || string.IsNullOrEmpty(updateProductModel.Description))
-            {
                 throw new ArgumentException("All fields have to be filled out.");
-            }
-            
+
             var product = await GetProduct(id);
 
             product.Id = id;
             product.Title = updateProductModel.Title;
             product.Description = updateProductModel.Description;
-            
+
             return await _repository.UpdateProduct(id, product);
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using marketplaceservice.Domain;
-using marketplaceservice.Models;
 
 namespace marketplaceservice.Repositories
 {

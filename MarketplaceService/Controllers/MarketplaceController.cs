@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using marketplaceservice.Models;
 using marketplaceservice.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace marketplaceservice.Controllers
 {
@@ -36,7 +33,7 @@ namespace marketplaceservice.Controllers
 
         [HttpPost]
         [Route("delegate")]
-        public async Task<IActionResult> Create([FromBody]CreateProductModel createProductModel)
+        public async Task<IActionResult> Create([FromBody] CreateProductModel createProductModel)
         {
             try
             {
@@ -73,8 +70,7 @@ namespace marketplaceservice.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return BadRequest(e.Message);
             }
         }
     }

@@ -4,6 +4,7 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <UserSecretsId>2145df81-9941-4fef-bc85-93ddde474a1f</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <RootNamespace>marketplaceservice</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

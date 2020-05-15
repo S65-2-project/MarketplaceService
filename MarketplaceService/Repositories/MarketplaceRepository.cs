@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using marketplaceservice.DatastoreSettings;
 using marketplaceservice.Domain;
-using marketplaceservice.Models;
-using marketplaceservice.Services;
 using MongoDB.Driver;
 
 namespace marketplaceservice.Repositories
@@ -17,19 +15,25 @@ namespace marketplaceservice.Repositories
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
-            
+
             _products = database.GetCollection<Product>(settings.MarketplaceCollectionName);
         }
 
-        public async Task<Product> CreateProduct(Product product) {
-            await _products.InsertOneAsync(product); return product;
+        public async Task<Product> CreateProduct(Product product)
+        {
+            await _products.InsertOneAsync(product);
+            return product;
         }
 
-        public async Task<List<Product>> GetAll() =>
-            await _products.Find(_ => true).ToListAsync();
+        public async Task<List<Product>> GetAll()
+        {
+            return await _products.Find(_ => true).ToListAsync();
+        }
 
-        public async Task<Product> GetProduct(Guid id) =>
-            await _products.Find(f => f.Id == id).FirstOrDefaultAsync();
+        public async Task<Product> GetProduct(Guid id)
+        {
+            return await _products.Find(f => f.Id == id).FirstOrDefaultAsync();
+        }
 
         public async Task<Product> UpdateProduct(Guid id, Product productIn)
         {
