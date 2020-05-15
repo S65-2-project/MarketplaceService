@@ -136,7 +136,7 @@ namespace marketplaceservicetests.Service
                 Title = updatedProduct.Title,
                 Description = updatedProduct.Description
             };
-
+            _repository.Setup(x => x.GetProduct(product.Id)).ReturnsAsync(product);
             _repository.Setup(x =>
                 x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
 
