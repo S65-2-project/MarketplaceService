@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketplaceService", "MarketplaceService\MarketplaceService.csproj", "{6608B6C6-C4B0-4181-BCA0-4C0AB3B4FFCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketplaceServiceTests", "MarketplaceServiceTests\MarketplaceServiceTests.csproj", "{0DF9600A-8E71-45B8-B3D4-E083C491B903}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempMarketplaceServiceTests", "TempMarketplaceServiceTests\TempMarketplaceServiceTests.csproj", "{0DF9600A-8E71-45B8-B3D4-E083C491B903}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
