@@ -7,7 +7,7 @@ using Xunit;
 
 namespace marketplaceservicetests.Repository
 {
-    // : IDisposable
+
     public class MarketplaceRepositoryTests : IDisposable
     {
         public MarketplaceRepositoryTests()

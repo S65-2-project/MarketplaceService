@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using marketplaceservice.Controllers;
 using marketplaceservice.Domain;
+using marketplaceservice.Exceptions;
 using marketplaceservice.Models;
 using marketplaceservice.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ namespace marketplaceservicetests.Controller
             };
 
             _marketplaceService.Setup(x => x.CreateProduct(productModel))
-                .Throws<ArgumentException>();
+                .Throws<EmptyFieldException>();
 
             //Act
             var result = await _marketplaceController.Create(productModel);
