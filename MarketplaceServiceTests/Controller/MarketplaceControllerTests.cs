@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using marketplaceservice.Controllers;
 using marketplaceservice.Domain;
+using marketplaceservice.Exceptions;
 using marketplaceservice.Models;
 using marketplaceservice.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ namespace marketplaceservicetests.Controller
             };
 
             _marketplaceService.Setup(x => x.CreateProduct(productModel))
-                .Throws<ArgumentException>();
+                .Throws<EmptyFieldException>();
 
             //Act
             var result = await _marketplaceController.Create(productModel);
@@ -71,13 +72,11 @@ namespace marketplaceservicetests.Controller
 
             _marketplaceService.Setup(x => x.CreateProduct(createProductModel)).ReturnsAsync(product);
 
-            var result = await _marketplaceController.Create(createProductModel);
-            var data = result as ObjectResult;
+            var result = await _marketplaceController.Create(createProductModel) as ObjectResult;
 
             Assert.NotNull(result);
-            Assert.NotNull(data);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product.Id, ((Product) data.Value).Id);
+            Assert.Equal(product.Id, ((Product) result.Value).Id);
         }
 
         [Fact]
@@ -156,14 +155,12 @@ namespace marketplaceservicetests.Controller
             _marketplaceService.Setup(x => x.GetProduct(product1.Id)).ReturnsAsync(product1);
 
             //Act
-            var result = await _marketplaceController.Get(product1.Id);
-            var data = result as ObjectResult;
+            var result = await _marketplaceController.Get(product1.Id) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);
-            Assert.NotNull(data);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product1.Id, ((Product) data.Value).Id);
+            Assert.Equal(product1.Id, ((Product) result.Value).Id);
         }
 
         [Fact]

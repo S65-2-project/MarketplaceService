@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using marketplaceservice.DatastoreSettings;
 using marketplaceservice.Domain;
 using marketplaceservice.Repositories;
@@ -7,9 +8,13 @@ using Xunit;
 
 namespace marketplaceservicetests.Repository
 {
-    // : IDisposable
+
     public class MarketplaceRepositoryTests : IDisposable
     {
+        
+        private readonly MongoDbRunner _mongoDbRunner;
+        private readonly IMarketplaceRepository _marketplaceRepository;
+        
         public MarketplaceRepositoryTests()
         {
             _mongoDbRunner = MongoDbRunner.Start();
@@ -24,14 +29,11 @@ namespace marketplaceservicetests.Repository
 
         public void Dispose()
         {
-            _mongoDbRunner.Dispose();
+            _mongoDbRunner?.Dispose();
         }
 
-        private readonly MongoDbRunner _mongoDbRunner;
-        private readonly IMarketplaceRepository _marketplaceRepository;
-
         [Fact]
-        public async void CreateProduct()
+        public async Task CreateProduct()
         {
             var product = new Product
             {
@@ -46,7 +48,7 @@ namespace marketplaceservicetests.Repository
         }
 
         [Fact]
-        public async void DeleteProductById()
+        public async Task DeleteProductById()
         {
             //Arrange
             var product1 = new Product
@@ -79,7 +81,7 @@ namespace marketplaceservicetests.Repository
         }
 
         [Fact]
-        public async void GetAll()
+        public async Task GetAll()
         {
             //Arrange
             var product1 = new Product
@@ -111,7 +113,7 @@ namespace marketplaceservicetests.Repository
         }
 
         [Fact]
-        public async void GetProductById()
+        public async Task GetProductById()
         {
             //Arrange
             var product1 = new Product
@@ -141,7 +143,7 @@ namespace marketplaceservicetests.Repository
         }
 
         [Fact]
-        public async void UpdateProduct()
+        public async Task UpdateProduct()
         {
             //Arrange
             var product1 = new Product
@@ -167,8 +169,6 @@ namespace marketplaceservicetests.Repository
             await _marketplaceRepository.UpdateProduct(product1.Id, product1);
 
             var result = await _marketplaceRepository.GetProduct(product1.Id);
-
-            // _testOutputHelper.WriteLine(result.Title);
 
             //Assert
             Assert.NotNull(result);

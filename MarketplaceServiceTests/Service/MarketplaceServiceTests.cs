@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using marketplaceservice.Domain;
+using marketplaceservice.Exceptions;
 using marketplaceservice.Models;
 using marketplaceservice.Repositories;
 using marketplaceservice.Services;
@@ -11,14 +12,14 @@ namespace marketplaceservicetests.Service
 {
     public class MarketplaceServiceTests
     {
+        private readonly IMarketplaceService _marketplaceService;
+        private readonly Mock<IMarketplaceRepository> _repository;
+        
         public MarketplaceServiceTests()
         {
             _repository = new Mock<IMarketplaceRepository>();
             _marketplaceService = new MarketplaceService(_repository.Object);
         }
-
-        private readonly IMarketplaceService _marketplaceService;
-        private readonly Mock<IMarketplaceRepository> _repository;
 
         [Fact]
         public async Task CreateProduct_Failed()
@@ -40,12 +41,11 @@ namespace marketplaceservicetests.Service
 
             _repository.Setup(x => x.CreateProduct(It.IsAny<Product>())).ReturnsAsync(product);
 
-            var result =
-                await Assert.ThrowsAsync<ArgumentException>(() =>
+            var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
                     _marketplaceService.CreateProduct(createProductModel));
 
             Assert.NotNull(result);
-            Assert.IsType<ArgumentException>(result);
+            Assert.IsType<EmptyFieldException>(result);
         }
 
         [Fact]
@@ -103,11 +103,11 @@ namespace marketplaceservicetests.Service
             _repository.Setup(x =>
                 x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
 
-            var result = await Assert.ThrowsAsync<ArgumentException>(() =>
+            var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
                 _marketplaceService.UpdateProduct(product.Id, updateProductModel));
 
             Assert.NotNull(result);
-            Assert.IsType<ArgumentException>(result);
+            Assert.IsType<EmptyFieldException>(result);
         }
 
         [Fact]
