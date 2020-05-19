@@ -13,6 +13,7 @@ namespace marketplaceservice.Repositories
         /// <param name="productIn"></param>
         /// <returns>Product</returns>
         Task<Product> CreateProduct(Product productIn);
+        
         /// <summary>
         /// Get all products
         /// </summary>
