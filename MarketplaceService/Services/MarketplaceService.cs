@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
-using marketplaceservice.Domain;
-using marketplaceservice.Exceptions;
-using marketplaceservice.Models;
-using marketplaceservice.Repositories;
+using MarketplaceService.Domain;
+using MarketplaceService.Exceptions;
+using MarketplaceService.Models;
+using MarketplaceService.Repositories;
 
-namespace marketplaceservice.Services
+namespace MarketplaceService.Services
 {
     public class MarketplaceService : IMarketplaceService
     {
         private readonly IMarketplaceRepository _marketplaceRepository;
 
-        public MarketplaceService(IMarketplaceRepository marketplaceMarketplaceRepository)
+        public MarketplaceService(IMarketplaceRepository marketplaceRepository)
         {
-            _marketplaceRepository = marketplaceMarketplaceRepository;
+            _marketplaceRepository = marketplaceRepository;
         }
 
         public async Task<Product> CreateProduct(CreateProductModel createProductModel)
@@ -21,14 +21,14 @@ namespace marketplaceservice.Services
             if (string.IsNullOrEmpty(createProductModel.Title) || string.IsNullOrEmpty(createProductModel.Description))
                 throw new EmptyFieldException();
 
-            var productIn = new Product
+            var product = new Product
             {
                 Id = Guid.NewGuid(),
                 Title = createProductModel.Title,
                 Description = createProductModel.Description
             };
 
-            return await _marketplaceRepository.CreateProduct(productIn);
+            return await _marketplaceRepository.CreateProduct(product);
         }
 
         public async Task<Product> GetProduct(Guid id)

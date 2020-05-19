@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using marketplaceservice.Domain;
+using MarketplaceService.Domain;
 
-namespace marketplaceservice.Repositories
+namespace MarketplaceService.Repositories
 {
     public interface IMarketplaceRepository
     {

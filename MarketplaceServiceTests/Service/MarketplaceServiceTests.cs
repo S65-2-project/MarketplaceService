@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
-using marketplaceservice.Domain;
-using marketplaceservice.Exceptions;
-using marketplaceservice.Models;
-using marketplaceservice.Repositories;
-using marketplaceservice.Services;
+using MarketplaceService.Domain;
+using MarketplaceService.Exceptions;
+using MarketplaceService.Models;
+using MarketplaceService.Repositories;
+using MarketplaceService.Services;
 using Moq;
 using Xunit;
 
-namespace marketplaceservicetests.Service
+namespace MarketplaceServiceTests.Service
 {
     public class MarketplaceServiceTests
     {
         private readonly IMarketplaceService _marketplaceService;
-        private readonly Mock<IMarketplaceRepository> _repository;
+        private readonly Mock<IMarketplaceRepository> _marketplaceRepository ;
         
         public MarketplaceServiceTests()
         {
-            _repository = new Mock<IMarketplaceRepository>();
-            _marketplaceService = new MarketplaceService(_repository.Object);
+            _marketplaceRepository  = new Mock<IMarketplaceRepository>();
+            _marketplaceService = new MarketplaceService.Services.MarketplaceService(_marketplaceRepository .Object);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace marketplaceservicetests.Service
                 Description = ""
             };
 
-            _repository.Setup(x => x.CreateProduct(It.IsAny<Product>())).ReturnsAsync(product);
+            _marketplaceRepository .Setup(x => x.CreateProduct(It.IsAny<Product>())).ReturnsAsync(product);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
                     _marketplaceService.CreateProduct(createProductModel));
@@ -66,7 +66,7 @@ namespace marketplaceservicetests.Service
                 Description = descriptionText
             };
 
-            _repository.Setup(x => x.CreateProduct(It.IsAny<Product>())).ReturnsAsync(product);
+            _marketplaceRepository .Setup(x => x.CreateProduct(It.IsAny<Product>())).ReturnsAsync(product);
 
             var result = await _marketplaceService.CreateProduct(createProductModel);
 
@@ -100,7 +100,7 @@ namespace marketplaceservicetests.Service
                 Description = updatedProduct.Description
             };
 
-            _repository.Setup(x =>
+            _marketplaceRepository .Setup(x =>
                 x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
@@ -136,8 +136,8 @@ namespace marketplaceservicetests.Service
                 Title = updatedProduct.Title,
                 Description = updatedProduct.Description
             };
-            _repository.Setup(x => x.GetProduct(product.Id)).ReturnsAsync(product);
-            _repository.Setup(x =>
+            _marketplaceRepository .Setup(x => x.GetProduct(product.Id)).ReturnsAsync(product);
+            _marketplaceRepository .Setup(x =>
                 x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
 
             var result = await _marketplaceService.UpdateProduct(product.Id, updateProductModel);

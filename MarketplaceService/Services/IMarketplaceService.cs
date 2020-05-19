@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using marketplaceservice.Domain;
-using marketplaceservice.Models;
+using MarketplaceService.Domain;
+using MarketplaceService.Models;
 
-namespace marketplaceservice.Services
+namespace MarketplaceService.Services
 {
     public interface IMarketplaceService
     {

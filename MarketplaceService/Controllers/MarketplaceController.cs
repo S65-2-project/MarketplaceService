@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using marketplaceservice.Models;
-using marketplaceservice.Services;
+using MarketplaceService.Models;
+using MarketplaceService.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace marketplaceservice.Controllers
+namespace MarketplaceService.Controllers
 {
     [ApiController]
     [Route("[controller]")]

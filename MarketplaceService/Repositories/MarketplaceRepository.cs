@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using marketplaceservice.DatastoreSettings;
-using marketplaceservice.Domain;
+using MarketplaceService.DatastoreSettings;
+using MarketplaceService.Domain;
 using MongoDB.Driver;
 
-namespace marketplaceservice.Repositories
+namespace MarketplaceService.Repositories
 {
     public class MarketplaceRepository : IMarketplaceRepository
     {

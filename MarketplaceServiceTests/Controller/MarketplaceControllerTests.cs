@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Threading.Tasks;
-using marketplaceservice.Controllers;
-using marketplaceservice.Domain;
-using marketplaceservice.Exceptions;
-using marketplaceservice.Models;
-using marketplaceservice.Services;
+using MarketplaceService.Controllers;
+using MarketplaceService.Domain;
+using MarketplaceService.Exceptions;
+using MarketplaceService.Models;
+using MarketplaceService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 
-namespace marketplaceservicetests.Controller
+namespace MarketplaceServiceTests.Controller
 {
     public class MarketplaceControllerTests
     {
+        private readonly MarketplaceController _marketplaceController;
+        private readonly Mock<IMarketplaceService> _marketplaceService;
+        
         public MarketplaceControllerTests()
         {
             _marketplaceService = new Mock<IMarketplaceService>();
             _marketplaceController = new MarketplaceController(_marketplaceService.Object);
         }
-
-        private readonly MarketplaceController _marketplaceController;
-        private readonly Mock<IMarketplaceService> _marketplaceService;
 
         [Fact]
         public async Task CreateProduct_BadRequest()
@@ -85,7 +85,7 @@ namespace marketplaceservicetests.Controller
             //Arrange
             var guid = Guid.NewGuid();
 
-            _marketplaceService.Setup(x => x.DeleteProduct(guid)).Throws<Exception>();
+            _marketplaceService.Setup(x => x.DeleteProduct(guid)).Throws<ProductDeleteException>();
 
             //Act
             var result = await _marketplaceController.Delete(guid);
@@ -127,7 +127,7 @@ namespace marketplaceservicetests.Controller
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.GetProduct(product1.Id)).Throws<Exception>();
+            _marketplaceService.Setup(x => x.GetProduct(product1.Id)).Throws<ProductNotFoundException>();
 
             //Act
             var result = await _marketplaceController.Get(product1.Id);
@@ -177,7 +177,7 @@ namespace marketplaceservicetests.Controller
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.UpdateProduct(guid, updateProductModel)).Throws<Exception>();
+            _marketplaceService.Setup(x => x.UpdateProduct(guid, updateProductModel)).Throws<ProductUpdateFailedException>();
 
             //Act
             var result = await _marketplaceController.Update(guid, updateProductModel);
@@ -211,14 +211,12 @@ namespace marketplaceservicetests.Controller
             _marketplaceService.Setup(x => x.UpdateProduct(guid, updateProductModel)).ReturnsAsync(product1);
 
             //Act
-            var result = await _marketplaceController.Update(guid, updateProductModel);
-            var data = result as ObjectResult;
+            var result = await _marketplaceController.Update(guid, updateProductModel) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);
-            Assert.NotNull(data);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product1, (Product) data.Value);
+            Assert.Equal(product1, (Product) result.Value);
         }
     }
 }

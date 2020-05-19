@@ -1,4 +1,4 @@
-﻿namespace marketplaceservice.DatastoreSettings
+﻿namespace MarketplaceService.DatastoreSettings
 {
     public class MarketplaceDatabaseSettings : IMarketplaceDatabaseSettings
     {

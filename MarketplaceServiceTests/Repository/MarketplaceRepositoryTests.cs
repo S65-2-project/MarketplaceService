@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using marketplaceservice.DatastoreSettings;
-using marketplaceservice.Domain;
-using marketplaceservice.Repositories;
+using MarketplaceService.DatastoreSettings;
+using MarketplaceService.Domain;
+using MarketplaceService.Repositories;
 using Mongo2Go;
 using Xunit;
 
-namespace marketplaceservicetests.Repository
+namespace MarketplaceServiceTests.Repository
 {
 
     public class MarketplaceRepositoryTests : IDisposable

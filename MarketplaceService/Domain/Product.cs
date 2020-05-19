@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace marketplaceservice.Domain
+namespace MarketplaceService.Domain
 {
     public class Product
     {

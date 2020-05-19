@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace marketplaceservice.Exceptions
+namespace MarketplaceService.Exceptions
 {
     [Serializable]
     public class EmptyFieldException : Exception

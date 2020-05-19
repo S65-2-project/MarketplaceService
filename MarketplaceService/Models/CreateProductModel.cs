@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace marketplaceservice.Models
+namespace MarketplaceService.Models
 {
     public class CreateProductModel
     {
