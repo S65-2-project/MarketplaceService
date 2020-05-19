@@ -8,10 +8,8 @@ using Xunit;
 
 namespace MarketplaceServiceTests.Repository
 {
-
     public class MarketplaceRepositoryTests : IDisposable
     {
-        
         private readonly MongoDbRunner _mongoDbRunner;
         private readonly IMarketplaceRepository _marketplaceRepository;
         

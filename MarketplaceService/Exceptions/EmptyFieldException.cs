@@ -10,5 +10,4 @@ namespace MarketplaceService.Exceptions
         {
         }
     }
-
 }
