@@ -34,6 +34,7 @@ namespace marketplaceservice.Repositories
         /// <param name="productIn"></param>
         /// <returns>Product</returns>
         Task<Product> UpdateProduct(Guid id, Product productIn);
+        
         /// <summary>
         /// Deletes a product
         /// </summary>
