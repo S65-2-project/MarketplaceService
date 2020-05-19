@@ -26,6 +26,7 @@ namespace marketplaceservice.Repositories
         /// <param name="id"></param>
         /// <returns>Product</returns>
         Task<Product> GetProduct(Guid id);
+        
         /// <summary>
         /// Updates a product
         /// </summary>
