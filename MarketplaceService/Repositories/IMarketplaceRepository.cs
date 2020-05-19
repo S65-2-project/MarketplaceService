@@ -19,6 +19,7 @@ namespace marketplaceservice.Repositories
         /// </summary>
         /// <returns>Products</returns>
         Task<List<Product>> GetAll();
+        
         /// <summary>
         /// Gets an product by id
         /// </summary>
