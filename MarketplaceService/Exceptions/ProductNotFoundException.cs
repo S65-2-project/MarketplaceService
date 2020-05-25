@@ -6,7 +6,7 @@ namespace MarketplaceService.Exceptions
     public class ProductNotFoundException: Exception
     {
         public ProductNotFoundException()
-            : base("All fields have to be filled out.")
+            : base("Product was not found.")
         {
         }
     }
