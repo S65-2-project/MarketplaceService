@@ -6,7 +6,7 @@ namespace MarketplaceService.Exceptions
     public class ProductDeleteException : Exception
     {
         public ProductDeleteException()
-            : base("Couldn't delete the product.")
+            : base("Couldn't delete the offer.")
         {
         }
     }

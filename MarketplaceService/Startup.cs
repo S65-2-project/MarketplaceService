@@ -1,3 +1,4 @@
+using System;
 using MarketplaceService.DatastoreSettings;
 using MarketplaceService.Repositories;
 using MarketplaceService.Services;
@@ -29,9 +30,11 @@ namespace MarketplaceService
                 sp.GetRequiredService<IOptions<MarketplaceDatabaseSettings>>().Value);
 
             //Repositories
-            services.AddTransient<IMarketplaceRepository, MarketplaceRepository>();
+            services.AddTransient<IDelegateRepository, DelegateRepository>();
+            services.AddTransient<IDAppRepository, DAppRepository>();
             //Services
-            services.AddTransient<IMarketplaceService, Services.MarketplaceService>();
+            services.AddTransient<IDelegateService, DelegateService>();
+            services.AddTransient<IDAppService, DAppService>();
             //Controllers
             services.AddControllers();
         }

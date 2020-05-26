@@ -12,13 +12,13 @@ namespace MarketplaceServiceTests.Service
 {
     public class MarketplaceServiceTests
     {
-        private readonly IMarketplaceService _marketplaceService;
-        private readonly Mock<IMarketplaceRepository> _marketplaceRepository ;
+        private readonly IDelegateService _marketplaceService;
+        private readonly Mock<IDelegateRepository> _marketplaceRepository ;
         
         public MarketplaceServiceTests()
         {
-            _marketplaceRepository  = new Mock<IMarketplaceRepository>();
-            _marketplaceService = new MarketplaceService.Services.MarketplaceService(_marketplaceRepository .Object);
+            _marketplaceRepository  = new Mock<IDelegateRepository>();
+            _marketplaceService = new MarketplaceService.Services.DelegateService(_marketplaceRepository .Object);
         }
 
         [Fact]
@@ -27,48 +27,47 @@ namespace MarketplaceServiceTests.Service
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var product = new Product
+            var product = new DelegateOffer
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var createProductModel = new CreateProductModel
-            {
+            var createProductModel = new CreateDelegateOfferModel {
                 Title = "",
                 Description = ""
             };
 
-            _marketplaceRepository .Setup(x => x.CreateProduct(It.IsAny<Product>())).ReturnsAsync(product);
+            _marketplaceRepository .Setup(x => x.CreateDelegateOffer(It.IsAny<DelegateOffer>())).ReturnsAsync(product);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                    _marketplaceService.CreateProduct(createProductModel));
+                    _marketplaceService.CreateDelegateOffer(createProductModel));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
         }
 
         [Fact]
-        public async Task CreateProduct_Success()
+        public async Task CreateDelegateOffer_Success()
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var product = new Product
+            var product = new DelegateOffer
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var createProductModel = new CreateProductModel
+            var createProductModel = new CreateDelegateOfferModel
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _marketplaceRepository .Setup(x => x.CreateProduct(It.IsAny<Product>())).ReturnsAsync(product);
+            _marketplaceRepository .Setup(x => x.CreateDelegateOffer(It.IsAny<DelegateOffer>())).ReturnsAsync(product);
 
-            var result = await _marketplaceService.CreateProduct(createProductModel);
+            var result = await _marketplaceService.CreateDelegateOffer(createProductModel);
 
             Assert.Equal(product.Title, result.Title);
         }
@@ -80,67 +79,67 @@ namespace MarketplaceServiceTests.Service
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
 
-            var product = new Product
+            var product = new DelegateOffer
             {
                 Id = id,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var updatedProduct = new Product
+            var updatedProduct = new DelegateOffer
             {
                 Id = id,
                 Title = "",
                 Description = "New Description"
             };
 
-            var updateProductModel = new UpdateProductModel
+            var updateProductModel = new UpdateDelegateOfferModel
             {
                 Title = updatedProduct.Title,
                 Description = updatedProduct.Description
             };
 
             _marketplaceRepository .Setup(x =>
-                x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
+                x.UpdateDelegateOffer(product.Id, product)).ReturnsAsync(updatedProduct);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                _marketplaceService.UpdateProduct(product.Id, updateProductModel));
+                _marketplaceService.UpdateDelegateOffer(product.Id, updateProductModel));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
         }
 
         [Fact]
-        public async Task UpdateProduct_Success()
+        public async Task UpdateDelegateOffer_Success()
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
 
-            var product = new Product
+            var product = new DelegateOffer
             {
                 Id = id,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var updatedProduct = new Product
+            var updatedProduct = new DelegateOffer
             {
                 Id = id,
                 Title = "New Title",
                 Description = "New Description"
             };
 
-            var updateProductModel = new UpdateProductModel
+            var updateProductModel = new UpdateDelegateOfferModel
             {
                 Title = updatedProduct.Title,
                 Description = updatedProduct.Description
             };
-            _marketplaceRepository .Setup(x => x.GetProduct(product.Id)).ReturnsAsync(product);
+            _marketplaceRepository .Setup(x => x.GetDelegateOffer(product.Id)).ReturnsAsync(product);
             _marketplaceRepository .Setup(x =>
-                x.UpdateProduct(product.Id, product)).ReturnsAsync(updatedProduct);
+                x.UpdateDelegateOffer(product.Id, product)).ReturnsAsync(updatedProduct);
 
-            var result = await _marketplaceService.UpdateProduct(product.Id, updateProductModel);
+            var result = await _marketplaceService.UpdateDelegateOffer(product.Id, updateProductModel);
 
             Assert.NotNull(result);
             Assert.Equal(updatedProduct, result);
