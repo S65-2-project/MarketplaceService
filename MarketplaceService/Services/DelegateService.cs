@@ -24,6 +24,7 @@ namespace MarketplaceService.Services
             var delegateOffer = new DelegateOffer
             {
                 Id = Guid.NewGuid(),
+                Provider = creatDelegateOfferModel.Provider,
                 Email = creatDelegateOfferModel.Email,
                 Title = creatDelegateOfferModel.Title,
                 Description = creatDelegateOfferModel.Description,

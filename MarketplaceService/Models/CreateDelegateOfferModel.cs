@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using MarketplaceService.Domain;
-using Microsoft.VisualBasic;
 
 namespace MarketplaceService.Models
 {
     public class CreateDelegateOfferModel
     {
         [Required] public Guid Guid { get; set; }
+        [Required] public User Provider { get; set; }
         [Required] public string Title { get; set; }
         [Required] public string Email { get; set; }
         [Required] public string Description { get; set; }

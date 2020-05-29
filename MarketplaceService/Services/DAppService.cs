@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
@@ -27,6 +26,7 @@ namespace MarketplaceService.Services
             {
                 Id = Guid.NewGuid(),
                 Title = createDAppOfferModel.Title,
+                Provider = createDAppOfferModel.Provider,
                 Description = createDAppOfferModel.Description,
                 OfferLengthInMonths = createDAppOfferModel.OfferLengthInMonths,
                 LiskPerMonth = createDAppOfferModel.LiskPerMonth, 

@@ -6,6 +6,7 @@ namespace MarketplaceService.Domain
     public class DelegateOffer
     {
         [Required] public Guid Id { get; set; }
+        [Required] public User Provider { get; set; }
         [Required] public string Email { get; set; }
         [Required] public string Title { get; set; }
         [Required] public string Description { get; set; }

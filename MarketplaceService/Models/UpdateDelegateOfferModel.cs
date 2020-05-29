@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MarketplaceService.Domain;
-using Microsoft.VisualBasic;
 
 namespace MarketplaceService.Models
 {
