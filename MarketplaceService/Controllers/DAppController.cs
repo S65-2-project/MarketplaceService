@@ -34,7 +34,7 @@ namespace MarketplaceService.Controllers
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> CreateGetDAppOffer([FromBody] CreateDAppOfferModel createDAppOfferModel)
+        public async Task<IActionResult> CreateDAppOffer([FromBody] CreateDAppOfferModel createDAppOfferModel)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace MarketplaceService.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteGetDAppOffer(Guid id)
+        public async Task<IActionResult> DeleteDAppOffer(Guid id)
         {
             try
             {

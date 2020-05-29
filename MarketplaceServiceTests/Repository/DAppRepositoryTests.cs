@@ -8,21 +8,21 @@ using Xunit;
 
 namespace MarketplaceServiceTests.Repository
 {
-    public class MarketplaceRepositoryTests : IDisposable
+public class DAppRepositoryTests : IDisposable
     {
         private readonly MongoDbRunner _mongoDbRunner;
-        private readonly IDelegateRepository _delegateRepository;
+        private readonly IDAppRepository _dAppRepository;
         
-        public MarketplaceRepositoryTests()
+        public DAppRepositoryTests()
         {
             _mongoDbRunner = MongoDbRunner.Start();
             var settings = new MarketplaceDatabaseSettings
             {
                 ConnectionString = _mongoDbRunner.ConnectionString,
                 DatabaseName = "IntegrationTests",
-                DelegateOfferCollectionName = "TestCollection"
+                DAppOfferCollectionName = "TestCollection"
             };
-            _delegateRepository = new DelegateRepository(settings);
+            _dAppRepository = new DAppRepository(settings);
         }
 
         public void Dispose()
@@ -33,43 +33,43 @@ namespace MarketplaceServiceTests.Repository
         [Fact]
         public async Task CreateProduct()
         {
-            var product = new DelegateOffer
+            var product = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title Text",
                 Description = "Description Text"
             };
 
-            var result = await _delegateRepository.CreateDelegateOffer(product);
+            var result = await _dAppRepository.CreateDAppOffer(product);
             Assert.NotNull(result);
             Assert.Equal(product, result);
         }
 
         [Fact]
-        public async Task DeleteDelegateOfferById()
+        public async Task DeleteDAppOfferById()
         {
             //Arrange
-            var product1 = new DelegateOffer
+            var product1 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title1",
                 Description = "Description1"
             };
 
-            var product2 = new DelegateOffer
+            var product2 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title2",
                 Description = "Description2"
             };
 
-            await _delegateRepository.CreateDelegateOffer(product1);
-            await _delegateRepository.CreateDelegateOffer(product2);
+            await _dAppRepository.CreateDAppOffer(product1);
+            await _dAppRepository.CreateDAppOffer(product2);
 
             //Act
-            await _delegateRepository.DeleteDelegateOffer(product1.Id);
-            var result = await _delegateRepository.GetDelegateOffer(product1.Id);
-            var resultAll = await _delegateRepository.GetAllDelegateOffers();
+            await _dAppRepository.DeleteDAppOffer(product1.Id);
+            var result = await _dAppRepository.GetDAppOffer(product1.Id);
+            var resultAll = await _dAppRepository.GetAllDAppOffers();
 
             //Assert
             Assert.Null(result);
@@ -82,25 +82,25 @@ namespace MarketplaceServiceTests.Repository
         public async Task GetAll()
         {
             //Arrange
-            var product1 = new DelegateOffer
+            var product1 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title1",
                 Description = "Description Text"
             };
 
-            var product2 = new DelegateOffer
+            var product2 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title2",
                 Description = "Description Text"
             };
 
-            await _delegateRepository.CreateDelegateOffer(product1);
-            await _delegateRepository.CreateDelegateOffer(product2);
+            await _dAppRepository.CreateDAppOffer(product1);
+            await _dAppRepository.CreateDAppOffer(product2);
 
             //Act
-            var result = await _delegateRepository.GetAllDelegateOffers();
+            var result = await _dAppRepository.GetAllDAppOffers();
 
             //Assert
             Assert.NotNull(result);
@@ -111,28 +111,28 @@ namespace MarketplaceServiceTests.Repository
         }
 
         [Fact]
-        public async Task GetDelegateOfferById()
+        public async Task GetDAppOfferById()
         {
             //Arrange
-            var product1 = new DelegateOffer
+            var product1 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title1",
                 Description = "Description Text"
             };
 
-            var product2 = new DelegateOffer
+            var product2 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title2",
                 Description = "Description Text"
             };
 
-            await _delegateRepository.CreateDelegateOffer(product1);
-            await _delegateRepository.CreateDelegateOffer(product2);
+            await _dAppRepository.CreateDAppOffer(product1);
+            await _dAppRepository.CreateDAppOffer(product2);
 
             //Act
-            var result = await _delegateRepository.GetDelegateOffer(product1.Id);
+            var result = await _dAppRepository.GetDAppOffer(product1.Id);
 
             //Assert
             Assert.NotNull(result);
@@ -141,32 +141,32 @@ namespace MarketplaceServiceTests.Repository
         }
 
         [Fact]
-        public async Task UpdateDelegateOffer()
+        public async Task UpdateDAppOffer()
         {
             //Arrange
-            var product1 = new DelegateOffer
+            var product1 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title1",
                 Description = "Description1"
             };
 
-            var product2 = new DelegateOffer
+            var product2 = new DAppOffer
             {
                 Id = Guid.NewGuid(),
                 Title = "Title2",
                 Description = "Description2"
             };
 
-            await _delegateRepository.CreateDelegateOffer(product1);
-            await _delegateRepository.CreateDelegateOffer(product2);
+            await _dAppRepository.CreateDAppOffer(product1);
+            await _dAppRepository.CreateDAppOffer(product2);
 
             //Act
             product1.Title = "Title1Edited";
 
-            await _delegateRepository.UpdateDelegateOffer(product1.Id, product1);
+            await _dAppRepository.UpdateDAppOffer(product1.Id, product1);
 
-            var result = await _delegateRepository.GetDelegateOffer(product1.Id);
+            var result = await _dAppRepository.GetDAppOffer(product1.Id);
 
             //Assert
             Assert.NotNull(result);
