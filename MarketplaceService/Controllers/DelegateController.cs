@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using MarketplaceService.Models;
 using MarketplaceService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace MarketplaceService.Controllers
 {
@@ -72,6 +74,33 @@ namespace MarketplaceService.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromBody] GetOfferModel getOfferModel)
+        {
+            // if (!getOfferModel.ValidPriceRange)
+            // {
+            //     return BadRequest("The maximum price cannot be less than the minimum price");
+            // }
+
+            var offers = await _delegateService.GetOffers(getOfferModel);
+            Console.WriteLine(offers);
+
+            var metadata = new
+            {
+                offers.TotalCount,
+                offers.PageSize,
+                offers.CurrentPage,
+                offers.TotalPages,
+                offers.HasNext,
+                offers.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+
+            return Ok(offers);
         }
     }
 }

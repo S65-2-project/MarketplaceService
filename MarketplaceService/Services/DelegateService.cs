@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
+using MarketplaceService.Helpers;
 using MarketplaceService.Models;
 using MarketplaceService.Repositories;
 
@@ -62,6 +65,11 @@ namespace MarketplaceService.Services
         public async Task DeleteDelegateOffer(Guid id)
         {
             await _delegateRepository.DeleteDelegateOffer(id);
+        }
+
+        public async Task<PagedList<DelegateOffer>> GetOffers(GetOfferModel getOfferModel)
+        {
+            return await _delegateRepository.GetAllDelegateOffers(getOfferModel);
         }
     }
 }

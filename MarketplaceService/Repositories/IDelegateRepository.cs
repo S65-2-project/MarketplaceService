@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
+using MarketplaceService.Helpers;
+using MarketplaceService.Models;
 
 namespace MarketplaceService.Repositories
 {
@@ -19,6 +21,8 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <returns>Products</returns>
         Task<List<DelegateOffer>> GetAllDelegateOffers();
+
+        Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel);
         
         /// <summary>
         /// Gets an product by id
@@ -40,5 +44,7 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <param name="id"></param>
         Task DeleteDelegateOffer(Guid id);
+
+        IEnumerable<DelegateOffer> GetAllDelegateOffersEnum();
     }
 }
