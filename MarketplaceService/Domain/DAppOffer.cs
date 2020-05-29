@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.VisualBasic;
 
 namespace MarketplaceService.Domain
 {
@@ -16,7 +15,7 @@ namespace MarketplaceService.Domain
         [Required] public int DelegatesNeededForOffer { get; set; }
         [Required] public List<User> DelegatesCurrentlyInOffer { get; set; }
         [Required] public string Region { get; set; }
-        [Required] public DateFormat DateStart { get; set; }
-        [Required] public DateFormat DateEnd { get; set; }
+        [Required] public DateTime DateStart { get; set; }
+        [Required] public DateTime DateEnd { get; set; }
     }
 }
