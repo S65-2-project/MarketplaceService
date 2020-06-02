@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MarketplaceService.Domain;
 using MarketplaceService.Models;
 using MarketplaceService.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,23 +8,23 @@ using Microsoft.AspNetCore.Mvc;
 namespace MarketplaceService.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class MarketplaceController : ControllerBase
+    [Route("[Controller]")]
+    public class DAppController : ControllerBase
     {
-        private readonly IMarketplaceService _marketplaceService;
+        private readonly IDAppService _dAppService;
 
-        public MarketplaceController(IMarketplaceService marketplaceService)
+        public DAppController(IDAppService dAppService)
         {
-            _marketplaceService = marketplaceService;
+            _dAppService = dAppService;
         }
-
+        
         [HttpGet]
-        [Route("delegate")]
-        public async Task<IActionResult> Get(Guid id)
+        [Route("{id}")]
+        public async Task<IActionResult> GetDAppOffer(Guid id)
         {
             try
             {
-                return Ok(await _marketplaceService.GetProduct(id));
+                return Ok(await _dAppService.GetDAppOffer(id));
             }
             catch (Exception e)
             {
@@ -32,12 +33,12 @@ namespace MarketplaceService.Controllers
         }
 
         [HttpPost]
-        [Route("delegate")]
-        public async Task<IActionResult> Create([FromBody] CreateProductModel createProductModel)
+        [Route("")]
+        public async Task<IActionResult> CreateDAppOffer([FromBody] CreateDAppOfferModel createDAppOfferModel)
         {
             try
             {
-                return Ok(await _marketplaceService.CreateProduct(createProductModel));
+                return Ok(await _dAppService.CreateDAppOffer(createDAppOfferModel));
             }
             catch (Exception e)
             {
@@ -46,12 +47,12 @@ namespace MarketplaceService.Controllers
         }
 
         [HttpDelete]
-        [Route("delegate")]
-        public async Task<IActionResult> Delete(Guid id)
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteDAppOffer(Guid id)
         {
             try
             {
-                await _marketplaceService.DeleteProduct(id);
+                await _dAppService.DeleteDAppOffer(id);
                 return Ok();
             }
             catch (Exception e)
@@ -61,12 +62,12 @@ namespace MarketplaceService.Controllers
         }
 
         [HttpPut]
-        [Route("delegate")]
-        public async Task<IActionResult> Update(Guid id, UpdateProductModel updateProductModel)
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateDAppOffer(Guid id, UpdateDAppOfferModel updateDAppOfferModel)
         {
             try
             {
-                return Ok(await _marketplaceService.UpdateProduct(id, updateProductModel));
+                return Ok(await _dAppService.UpdateDAppOffer(id, updateDAppOfferModel));
             }
             catch (Exception e)
             {

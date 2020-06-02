@@ -11,37 +11,36 @@ using Xunit;
 
 namespace MarketplaceServiceTests.Controller
 {
-    public class MarketplaceControllerTests
+    public class DelegateControllerTests
     {
-        private readonly MarketplaceController _marketplaceController;
-        private readonly Mock<IMarketplaceService> _marketplaceService;
-        
-        public MarketplaceControllerTests()
+        private readonly DelegateController _delegateController;
+        private readonly Mock<IDelegateService> _delegateService;
+
+        public DelegateControllerTests()
         {
-            _marketplaceService = new Mock<IMarketplaceService>();
-            _marketplaceController = new MarketplaceController(_marketplaceService.Object);
+            _delegateService = new Mock<IDelegateService>();
+            _delegateController = new DelegateController(_delegateService.Object);
         }
 
         [Fact]
-        public async Task CreateProduct_BadRequest()
+        public async Task CreateDelegateOffer_BadRequest()
         {
             //Arrange
             var guid = Guid.NewGuid();
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var productModel = new CreateProductModel
-            {
+            var productModel = new CreateDelegateOfferModel() {
                 Guid = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.CreateProduct(productModel))
+            _delegateService.Setup(x => x.CreateDelegateOffer(productModel))
                 .Throws<EmptyFieldException>();
 
             //Act
-            var result = await _marketplaceController.Create(productModel);
+            var result = await _delegateController.CreateDelegateOffer(productModel);
 
             //Assert
             Assert.NotNull(result);
@@ -49,46 +48,46 @@ namespace MarketplaceServiceTests.Controller
         }
 
         [Fact]
-        public async Task CreateProduct_Success()
+        public async Task CreateDelegateOffer_Success()
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
             var guid = Guid.NewGuid();
 
-            var product = new Product
+            var product = new DelegateOffer()
             {
                 Id = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var createProductModel = new CreateProductModel
+            var createProductModel = new CreateDelegateOfferModel()
             {
                 Guid = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.CreateProduct(createProductModel)).ReturnsAsync(product);
+            _delegateService.Setup(x => x.CreateDelegateOffer(createProductModel)).ReturnsAsync(product);
 
-            var result = await _marketplaceController.Create(createProductModel) as ObjectResult;
+            var result = await _delegateController.CreateDelegateOffer(createProductModel) as ObjectResult;
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product.Id, ((Product) result.Value).Id);
+            Assert.Equal(product.Id, ((DelegateOffer) result.Value).Id);
         }
 
         [Fact]
-        public async Task DeleteProduct_BadRequest()
+        public async Task DeleteDelegateOffer_BadRequest()
         {
             //Arrange
             var guid = Guid.NewGuid();
 
-            _marketplaceService.Setup(x => x.DeleteProduct(guid)).Throws<ProductDeleteException>();
+            _delegateService.Setup(x => x.DeleteDelegateOffer(guid)).Throws<ProductDeleteException>();
 
             //Act
-            var result = await _marketplaceController.Delete(guid);
+            var result = await _delegateController.DeleteDelegateOffer(guid);
 
             //Assert
             Assert.NotNull(result);
@@ -96,15 +95,15 @@ namespace MarketplaceServiceTests.Controller
         }
 
         [Fact]
-        public async Task DeleteProduct_Success()
+        public async Task DeleteDelegateOffer_Success()
         {
             //Arrange
             var guid = Guid.NewGuid();
 
-            _marketplaceService.Setup(x => x.DeleteProduct(guid));
+            _delegateService.Setup(x => x.DeleteDelegateOffer(guid));
 
             //Act
-            var result = await _marketplaceController.Delete(guid);
+            var result = await _delegateController.DeleteDelegateOffer(guid);
 
             //Assert
             Assert.NotNull(result);
@@ -113,24 +112,24 @@ namespace MarketplaceServiceTests.Controller
 
 
         [Fact]
-        public async Task GetProduct_BadRequest()
+        public async Task GetDelegateOffer_BadRequest()
         {
             //Arrange
             var guid = Guid.NewGuid();
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var product1 = new Product
+            var product1 = new DelegateOffer()
             {
                 Id = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.GetProduct(product1.Id)).Throws<ProductNotFoundException>();
+            _delegateService.Setup(x => x.GetDelegateOffer(product1.Id)).Throws<OfferNotFoundException>();
 
             //Act
-            var result = await _marketplaceController.Get(product1.Id);
+            var result = await _delegateController.GetDelegateOffer(product1.Id);
 
             //Assert
             Assert.NotNull(result);
@@ -138,29 +137,29 @@ namespace MarketplaceServiceTests.Controller
         }
 
         [Fact]
-        public async Task GetProduct_Success()
+        public async Task GetDelegateOffer_Success()
         {
             //Arrange
             var guid = Guid.NewGuid();
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var product1 = new Product
+            var product1 = new DelegateOffer
             {
                 Id = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.GetProduct(product1.Id)).ReturnsAsync(product1);
+            _delegateService.Setup(x => x.GetDelegateOffer(product1.Id)).ReturnsAsync(product1);
 
             //Act
-            var result = await _marketplaceController.Get(product1.Id) as ObjectResult;
+            var result = await _delegateController.GetDelegateOffer(product1.Id) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product1.Id, ((Product) result.Value).Id);
+            Assert.Equal(product1.Id, ((DelegateOffer) result.Value).Id);
         }
 
         [Fact]
@@ -171,16 +170,16 @@ namespace MarketplaceServiceTests.Controller
             const string titleText = "Title1";
             const string descriptionText = "Description1";
 
-            var updateProductModel = new UpdateProductModel
+            var updateProductModel = new UpdateDelegateOfferModel
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.UpdateProduct(guid, updateProductModel)).Throws<ProductUpdateFailedException>();
+            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel)).Throws<OfferUpdateFailedException>();
 
             //Act
-            var result = await _marketplaceController.Update(guid, updateProductModel);
+            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel);
 
             //Assert
             Assert.NotNull(result);
@@ -195,28 +194,28 @@ namespace MarketplaceServiceTests.Controller
             const string titleText = "Title1";
             const string descriptionText = "Description1";
 
-            var updateProductModel = new UpdateProductModel
+            var updateProductModel = new UpdateDelegateOfferModel
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var product1 = new Product
+            var product1 = new DelegateOffer
             {
                 Id = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _marketplaceService.Setup(x => x.UpdateProduct(guid, updateProductModel)).ReturnsAsync(product1);
+            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel)).ReturnsAsync(product1);
 
             //Act
-            var result = await _marketplaceController.Update(guid, updateProductModel) as ObjectResult;
+            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product1, (Product) result.Value);
+            Assert.Equal(product1, (DelegateOffer) result.Value);
         }
     }
 }

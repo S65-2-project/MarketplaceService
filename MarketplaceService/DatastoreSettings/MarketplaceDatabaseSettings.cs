@@ -2,14 +2,16 @@
 {
     public class MarketplaceDatabaseSettings : IMarketplaceDatabaseSettings
     {
-        public string MarketplaceCollectionName { get; set; }
+        public string DelegateOfferCollectionName { get; set; }
+        public string DAppOfferCollectionName { get; set; }
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
 
     public interface IMarketplaceDatabaseSettings
     {
-        string MarketplaceCollectionName { get; set; }
+        public string DAppOfferCollectionName { get; set; }
+        public string DelegateOfferCollectionName { get; set; }
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
     }

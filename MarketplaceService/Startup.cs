@@ -1,3 +1,4 @@
+using System;
 using MarketplaceService.DatastoreSettings;
 using MarketplaceService.Repositories;
 using MarketplaceService.Services;
@@ -29,16 +30,26 @@ namespace MarketplaceService
                 sp.GetRequiredService<IOptions<MarketplaceDatabaseSettings>>().Value);
 
             //Repositories
-            services.AddTransient<IMarketplaceRepository, MarketplaceRepository>();
+            services.AddTransient<IDelegateRepository, DelegateRepository>();
+            services.AddTransient<IDAppRepository, DAppRepository>();
             //Services
-            services.AddTransient<IMarketplaceService, Services.MarketplaceService>();
+            services.AddTransient<IDelegateService, DelegateService>();
+            services.AddTransient<IDAppService, DAppService>();
             //Controllers
             services.AddControllers();
+            
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+            );
+            
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
