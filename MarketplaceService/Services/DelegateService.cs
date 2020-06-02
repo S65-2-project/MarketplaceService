@@ -28,7 +28,6 @@ namespace MarketplaceService.Services
             {
                 Id = Guid.NewGuid(),
                 Provider = creatDelegateOfferModel.Provider,
-                Email = creatDelegateOfferModel.Email,
                 Title = creatDelegateOfferModel.Title,
                 Description = creatDelegateOfferModel.Description,
                 Region = creatDelegateOfferModel.Region,
@@ -52,7 +51,6 @@ namespace MarketplaceService.Services
             var delegateOffer = await GetDelegateOffer(id);
 
             delegateOffer.Id = id;
-            delegateOffer.Email = updateDelegateOfferModel.Email;
             delegateOffer.Title = updateDelegateOfferModel.Title;
             delegateOffer.Description = updateDelegateOfferModel.Description;
             delegateOffer.Region = updateDelegateOfferModel.Region;

@@ -7,7 +7,6 @@ namespace MarketplaceService.Domain
     {
         [Required] public Guid Id { get; set; }
         [Required] public User Provider { get; set; }
-        [Required] public string Email { get; set; }
         [Required] public string Title { get; set; }
         [Required] public string Description { get; set; }
         [Required] public string Region { get; set; }
