@@ -11,15 +11,15 @@ using Xunit;
 
 namespace MarketplaceServiceTests.Controller
 {
-    public class DelegateControllerTests
+    public class DAppControllerTests
     {
-        private readonly DelegateController _delegateController;
-        private readonly Mock<IDelegateService> _delegateService;
+        private readonly DAppController _dAppController;
+        private readonly Mock<IDAppService> _dAppService;
 
-        public DelegateControllerTests()
+        public DAppControllerTests()
         {
-            _delegateService = new Mock<IDelegateService>();
-            _delegateController = new DelegateController(_delegateService.Object);
+            _dAppService = new Mock<IDAppService>();
+            _dAppController = new DAppController(_dAppService.Object);
         }
 
         [Fact]
@@ -30,17 +30,16 @@ namespace MarketplaceServiceTests.Controller
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var productModel = new CreateDelegateOfferModel() {
-                Guid = guid,
+            var productModel = new CreateDAppOfferModel() {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.CreateDelegateOffer(productModel))
+            _dAppService.Setup(x => x.CreateDAppOffer(productModel))
                 .Throws<EmptyFieldException>();
 
             //Act
-            var result = await _delegateController.CreateDelegateOffer(productModel);
+            var result = await _dAppController.CreateDAppOffer(productModel);
 
             //Assert
             Assert.NotNull(result);
@@ -48,34 +47,30 @@ namespace MarketplaceServiceTests.Controller
         }
 
         [Fact]
-        public async Task CreateDelegateOffer_Success()
+        public async Task CreateDAppOffer_Success()
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var guid = Guid.NewGuid();
-
-            var product = new DelegateOffer()
+            var product = new DAppOffer()
             {
-                Id = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var createProductModel = new CreateDelegateOfferModel()
+            var createProductModel = new CreateDAppOfferModel()
             {
-                Guid = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.CreateDelegateOffer(createProductModel)).ReturnsAsync(product);
+            _dAppService.Setup(x => x.CreateDAppOffer(createProductModel)).ReturnsAsync(product);
 
-            var result = await _delegateController.CreateDelegateOffer(createProductModel) as ObjectResult;
+            var result = await _dAppController.CreateDAppOffer(createProductModel) as ObjectResult;
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product.Id, ((DelegateOffer) result.Value).Id);
+            Assert.Equal(product.Title, ((DAppOffer) result.Value).Title);
         }
 
         [Fact]
@@ -84,10 +79,10 @@ namespace MarketplaceServiceTests.Controller
             //Arrange
             var guid = Guid.NewGuid();
 
-            _delegateService.Setup(x => x.DeleteDelegateOffer(guid)).Throws<ProductDeleteException>();
+            _dAppService.Setup(x => x.DeleteDAppOffer(guid)).Throws<ProductDeleteException>();
 
             //Act
-            var result = await _delegateController.DeleteDelegateOffer(guid);
+            var result = await _dAppController.DeleteDAppOffer(guid);
 
             //Assert
             Assert.NotNull(result);
@@ -100,10 +95,10 @@ namespace MarketplaceServiceTests.Controller
             //Arrange
             var guid = Guid.NewGuid();
 
-            _delegateService.Setup(x => x.DeleteDelegateOffer(guid));
+            _dAppService.Setup(x => x.DeleteDAppOffer(guid));
 
             //Act
-            var result = await _delegateController.DeleteDelegateOffer(guid);
+            var result = await _dAppController.DeleteDAppOffer(guid);
 
             //Assert
             Assert.NotNull(result);
@@ -126,10 +121,10 @@ namespace MarketplaceServiceTests.Controller
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.GetDelegateOffer(product1.Id)).Throws<OfferNotFoundException>();
+            _dAppService.Setup(x => x.GetDAppOffer(product1.Id)).Throws<OfferNotFoundException>();
 
             //Act
-            var result = await _delegateController.GetDelegateOffer(product1.Id);
+            var result = await _dAppController.GetDAppOffer(product1.Id);
 
             //Assert
             Assert.NotNull(result);
@@ -144,22 +139,22 @@ namespace MarketplaceServiceTests.Controller
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
 
-            var product1 = new DelegateOffer
+            var product1 = new DAppOffer
             {
                 Id = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.GetDelegateOffer(product1.Id)).ReturnsAsync(product1);
+            _dAppService.Setup(x => x.GetDAppOffer(guid)).ReturnsAsync(product1);
 
             //Act
-            var result = await _delegateController.GetDelegateOffer(product1.Id) as ObjectResult;
+            var result = await _dAppController.GetDAppOffer(product1.Id) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product1.Id, ((DelegateOffer) result.Value).Id);
+            Assert.Equal(product1.Id, ((DAppOffer) result.Value).Id);
         }
 
         [Fact]
@@ -170,16 +165,16 @@ namespace MarketplaceServiceTests.Controller
             const string titleText = "Title1";
             const string descriptionText = "Description1";
 
-            var updateProductModel = new UpdateDelegateOfferModel
+            var updateProductModel = new UpdateDAppOfferModel
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel)).Throws<OfferUpdateFailedException>();
+            _dAppService.Setup(x => x.UpdateDAppOffer(guid, updateProductModel)).Throws<OfferUpdateFailedException>();
 
             //Act
-            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel);
+            var result = await _dAppController.UpdateDAppOffer(guid, updateProductModel);
 
             //Assert
             Assert.NotNull(result);
@@ -194,28 +189,28 @@ namespace MarketplaceServiceTests.Controller
             const string titleText = "Title1";
             const string descriptionText = "Description1";
 
-            var updateProductModel = new UpdateDelegateOfferModel
+            var updateProductModel = new UpdateDAppOfferModel
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            var product1 = new DelegateOffer
+            var product1 = new DAppOffer
             {
                 Id = guid,
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel)).ReturnsAsync(product1);
+            _dAppService.Setup(x => x.UpdateDAppOffer(guid, updateProductModel)).ReturnsAsync(product1);
 
             //Act
-            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel) as ObjectResult;
+            var result = await _dAppController.UpdateDAppOffer(guid, updateProductModel) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(product1, (DelegateOffer) result.Value);
+            Assert.Equal(product1, (DAppOffer) result.Value);
         }
     }
 }
