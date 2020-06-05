@@ -6,8 +6,6 @@ using MarketplaceService.DatastoreSettings;
 using MarketplaceService.Domain;
 using MarketplaceService.Helpers;
 using MarketplaceService.Models;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace MarketplaceService.Repositories
