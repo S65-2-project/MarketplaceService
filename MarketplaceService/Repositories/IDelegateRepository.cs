@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
-using MarketplaceService.Helpers;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Models;
 
 namespace MarketplaceService.Repositories
@@ -28,7 +28,7 @@ namespace MarketplaceService.Repositories
         /// <param name="getOfferModel"> filter parameters </param>
         /// <returns> Pagedlist </returns>
         Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel);
-        
+
         /// <summary>
         /// Gets an product by id
         /// </summary>

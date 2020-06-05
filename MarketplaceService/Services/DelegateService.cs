@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
-using MarketplaceService.Helpers;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Models;
 using MarketplaceService.Repositories;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MarketplaceService.DatastoreSettings;
 using MarketplaceService.Domain;
-using MarketplaceService.Helpers;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Models;
 using MongoDB.Driver;
 
@@ -39,23 +39,23 @@ namespace MarketplaceService.Repositories
             var offers = _delegateOffers.AsQueryable().OrderBy(on => on.LiskPerMonth).AsQueryable();
 
             // Apply filters
-            if (getOfferModel.minPrice != null)
-                offers = offers.Where(o => o.LiskPerMonth >= getOfferModel.minPrice);
+            if (getOfferModel.MinPrice != null)
+                offers = offers.Where(o => o.LiskPerMonth >= getOfferModel.MinPrice);
 
-            if (getOfferModel.maxPrice != null)
-                offers = offers.Where(o => o.LiskPerMonth <= getOfferModel.maxPrice);
+            if (getOfferModel.MaxPrice != null)
+                offers = offers.Where(o => o.LiskPerMonth <= getOfferModel.MaxPrice);
 
-            if (getOfferModel.minAvailableForInMonth != null)
-                offers = offers.Where(o => o.AvailableForInMonths >= getOfferModel.minAvailableForInMonth);
+            if (getOfferModel.MinAvailableForInMonth != null)
+                offers = offers.Where(o => o.AvailableForInMonths >= getOfferModel.MinAvailableForInMonth);
 
-            if (getOfferModel.maxAvailableForInMonth != null)
-                offers = offers.Where(o => o.AvailableForInMonths <= getOfferModel.maxAvailableForInMonth);
+            if (getOfferModel.MaxAvailableForInMonth != null)
+                offers = offers.Where(o => o.AvailableForInMonths <= getOfferModel.MaxAvailableForInMonth);
 
-            if (!string.IsNullOrEmpty(getOfferModel.searchQuery))
-                offers = offers.Where(o => o.Title.ToLower().Contains(getOfferModel.searchQuery.ToLower()));
+            if (!string.IsNullOrEmpty(getOfferModel.SearchQuery))
+                offers = offers.Where(o => o.Title.ToLower().Contains(getOfferModel.SearchQuery.ToLower()));
 
-            if (!string.IsNullOrEmpty(getOfferModel.regionQuery))
-                offers = offers.Where(o => o.Region.ToLower().Contains(getOfferModel.regionQuery.ToLower()));
+            if (!string.IsNullOrEmpty(getOfferModel.RegionQuery))
+                offers = offers.Where(o => o.Region.ToLower().Contains(getOfferModel.RegionQuery.ToLower()));
 
             return await PagedList<DelegateOffer>.ToPagedList(offers, getOfferModel.PageNumber, getOfferModel.PageSize);
         }

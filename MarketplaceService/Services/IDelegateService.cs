@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
-using MarketplaceService.Helpers;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Models;
 
 namespace MarketplaceService.Services
