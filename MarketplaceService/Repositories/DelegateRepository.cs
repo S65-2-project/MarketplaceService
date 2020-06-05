@@ -37,14 +37,10 @@ namespace MarketplaceService.Repositories
 
         public async Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel)
         {
-            // var offers = _delegateOffers.AsQueryable();
-
-            Console.WriteLine(getOfferModel.ToJson());
-
-            // var offers = _delegateOffers.AsQueryable().Where(f => f.LiskPerMonth >= getOfferModel.minPrice && f.LiskPerMonth <= getOfferModel.maxPrice).OrderBy(on => on.LiskPerMonth).AsQueryable();
-
+            // Retrieve the collection as queryable
             var offers = _delegateOffers.AsQueryable().OrderBy(on => on.LiskPerMonth).AsQueryable();
 
+            // Apply filters
             if (getOfferModel.minPrice != null)
                 offers = offers.Where(o => o.LiskPerMonth >= getOfferModel.minPrice);
 
@@ -54,25 +50,16 @@ namespace MarketplaceService.Repositories
             if (getOfferModel.minAvailableForInMonth != null)
                 offers = offers.Where(o => o.AvailableForInMonths >= getOfferModel.minAvailableForInMonth);
 
-
             if (getOfferModel.maxAvailableForInMonth != null)
                 offers = offers.Where(o => o.AvailableForInMonths <= getOfferModel.maxAvailableForInMonth);
 
-
             if (!string.IsNullOrEmpty(getOfferModel.searchQuery))
                 offers = offers.Where(o => o.Title.ToLower().Contains(getOfferModel.searchQuery.ToLower()));
-
 
             if (!string.IsNullOrEmpty(getOfferModel.regionQuery))
                 offers = offers.Where(o => o.Region.ToLower().Contains(getOfferModel.regionQuery.ToLower()));
 
             return await PagedList<DelegateOffer>.ToPagedList(offers, getOfferModel.PageNumber, getOfferModel.PageSize);
-        }
-
-        public IEnumerable<DelegateOffer> GetAllDelegateOffersEnum()
-        {
-            // _delegateOffers.Find(_ => true).
-            return _delegateOffers.Find(_ => true).ToEnumerable();
         }
 
         public async Task<DelegateOffer> GetDelegateOffer(Guid id)

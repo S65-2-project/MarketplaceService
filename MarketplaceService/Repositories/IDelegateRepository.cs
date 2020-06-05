@@ -22,6 +22,11 @@ namespace MarketplaceService.Repositories
         /// <returns>Products</returns>
         Task<List<DelegateOffer>> GetAllDelegateOffers();
 
+        /// <summary>
+        /// Get filtered list of products
+        /// </summary>
+        /// <param name="getOfferModel"> filter parameters </param>
+        /// <returns> Pagedlist </returns>
         Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel);
         
         /// <summary>
@@ -44,7 +49,5 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <param name="id"></param>
         Task DeleteDelegateOffer(Guid id);
-
-        IEnumerable<DelegateOffer> GetAllDelegateOffersEnum();
     }
 }
