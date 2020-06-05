@@ -51,6 +51,7 @@ namespace MarketplaceService
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
+                .WithExposedHeaders("X-Pagination")
             );
 
             app.UseHttpsRedirection();
