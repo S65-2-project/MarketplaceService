@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketplaceService.DatastoreSettings;
 using MarketplaceService.Domain;
+using MarketplaceService.DataTypes;
+using MarketplaceService.Models;
 using MongoDB.Driver;
 
 namespace MarketplaceService.Repositories
@@ -30,6 +33,33 @@ namespace MarketplaceService.Repositories
             return await _delegateOffers.Find(_ => true).ToListAsync();
         }
 
+        public async Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel)
+        {
+            // Retrieve the collection as queryable
+            var offers = _delegateOffers.AsQueryable().OrderBy(on => on.LiskPerMonth).AsQueryable();
+
+            // Apply filters
+            if (getOfferModel.MinPrice != null)
+                offers = offers.Where(o => o.LiskPerMonth >= getOfferModel.MinPrice);
+
+            if (getOfferModel.MaxPrice != null)
+                offers = offers.Where(o => o.LiskPerMonth <= getOfferModel.MaxPrice);
+
+            if (getOfferModel.MinAvailableForInMonth != null)
+                offers = offers.Where(o => o.AvailableForInMonths >= getOfferModel.MinAvailableForInMonth);
+
+            if (getOfferModel.MaxAvailableForInMonth != null)
+                offers = offers.Where(o => o.AvailableForInMonths <= getOfferModel.MaxAvailableForInMonth);
+
+            if (!string.IsNullOrEmpty(getOfferModel.SearchQuery))
+                offers = offers.Where(o => o.Title.ToLower().Contains(getOfferModel.SearchQuery.ToLower()));
+
+            if (!string.IsNullOrEmpty(getOfferModel.RegionQuery))
+                offers = offers.Where(o => o.Region.ToLower().Contains(getOfferModel.RegionQuery.ToLower()));
+
+            return await PagedList<DelegateOffer>.ToPagedList(offers, getOfferModel.PageNumber, getOfferModel.PageSize);
+        }
+
         public async Task<DelegateOffer> GetDelegateOffer(Guid id)
         {
             return await _delegateOffers.Find(f => f.Id == id).FirstOrDefaultAsync();
@@ -41,7 +71,7 @@ namespace MarketplaceService.Repositories
             return productIn;
         }
 
-        public async Task DeleteDelegateOffer(Guid id )
+        public async Task DeleteDelegateOffer(Guid id)
         {
             await _delegateOffers.DeleteManyAsync(f => f.Id == id);
             return;

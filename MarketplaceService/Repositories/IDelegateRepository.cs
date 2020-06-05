@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
+using MarketplaceService.DataTypes;
+using MarketplaceService.Models;
 
 namespace MarketplaceService.Repositories
 {
@@ -19,7 +21,14 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <returns>Products</returns>
         Task<List<DelegateOffer>> GetAllDelegateOffers();
-        
+
+        /// <summary>
+        /// Get filtered list of products
+        /// </summary>
+        /// <param name="getOfferModel"> filter parameters </param>
+        /// <returns> Pagedlist </returns>
+        Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel);
+
         /// <summary>
         /// Gets an product by id
         /// </summary>
