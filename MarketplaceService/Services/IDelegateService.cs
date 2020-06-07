@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MarketplaceService.Domain;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Models;
 
 namespace MarketplaceService.Services
@@ -31,5 +32,12 @@ namespace MarketplaceService.Services
         /// </summary>
         /// <param name="id"></param>
         Task DeleteDelegateOffer(Guid id);
+
+        /// <summary>
+        /// Gets filtered list
+        /// </summary>
+        /// <param name="getOfferModel"> filter options</param>
+        /// <returns>filtered pagedlist</returns>
+        Task<PagedList<DelegateOffer>> GetOffers(GetOfferModel getOfferModel);
     }
 }

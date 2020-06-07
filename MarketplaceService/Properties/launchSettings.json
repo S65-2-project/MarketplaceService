@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "marketplaceservice": {
+    "MarketplaceService": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "marketplace",

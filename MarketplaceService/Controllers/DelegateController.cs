@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MarketplaceService.Models;
 using MarketplaceService.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace MarketplaceService.Controllers
 {
@@ -72,6 +73,28 @@ namespace MarketplaceService.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] GetOfferModel getOfferModel)
+        {
+            // gets offers that comply with the filters in the getOfferModel
+            var offers = await _delegateService.GetOffers(getOfferModel);
+
+            // make headerdata for the frontend
+            var metadata = new
+            {
+                offers.TotalCount,
+                offers.PageSize,
+                offers.CurrentPage,
+                offers.TotalPages,
+                offers.HasNext,
+                offers.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(offers);
         }
     }
 }
