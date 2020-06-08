@@ -57,5 +57,37 @@ namespace MarketplaceService.Repositories
             await _dAppOffers.ReplaceOneAsync(f => f.Id == id, offerIn);
             return offerIn;
         }
+
+        public async Task RemoveDAppOffersWithuser(Guid id)
+        {
+            await _dAppOffers.DeleteManyAsync(offer => offer.Provider.Id == id);
+        }
+
+        public async Task RemoveDelegateFromAllOffersWithuser(Guid id)
+        {
+            var listDAppsWithUserThatIsGonnaBeRemoved = await _dAppOffers.Find(offer => offer.DelegatesCurrentlyInOffer.Exists(user => user.Id == id)).ToListAsync(); //get all offer which has the user with id
+            foreach(var dapp in listDAppsWithUserThatIsGonnaBeRemoved)
+            {
+                dapp.DelegatesCurrentlyInOffer.Remove(dapp.DelegatesCurrentlyInOffer.Find(user => user.Id == id)); //remove the user from list.
+                await UpdateDAppOffer(dapp.Id, dapp);//update dapp with list without user
+            }
+        }
+
+        public async Task UpdateUserEmail(Guid id, string newEmail)
+        {
+            var listWithDelegatesInOfferWithID = await _dAppOffers.Find(offer => offer.DelegatesCurrentlyInOffer.Exists(user => user.Id == id)).ToListAsync();
+            foreach(var dapp in listWithDelegatesInOfferWithID)
+            {
+                dapp.DelegatesCurrentlyInOffer.Find(user => user.Id == id).Name = newEmail;
+                await UpdateDAppOffer(dapp.Id, dapp);
+            }
+
+            var listProvidersWithId = await _dAppOffers.Find(offer => offer.Provider.Id == id).ToListAsync();
+            foreach(var dapp in listProvidersWithId)
+            {
+                dapp.Provider.Name = newEmail;
+                await UpdateDAppOffer(dapp.Id, dapp);
+            }
+        }
     }
 }
