@@ -44,7 +44,7 @@ namespace MarketplaceService
             services.AddControllers();
             //Message Consumer
             services.AddMessageConsumer(Configuration["MessageQueueSettings:Uri"],
-                "marketplace-service",
+                "MarketplaceService",
                 builder => builder.WithHandler<DeleteUserMessageHandler>("delete-user").WithHandler<UpdateUserMessageHandler>("update-user"));
             services.AddCors();
             
