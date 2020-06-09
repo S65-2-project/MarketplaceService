@@ -28,6 +28,13 @@ namespace MarketplaceService.Repositories
         /// <param name="getDelegateOfferModel"> filter parameters </param>
         /// <returns> Pagedlist </returns>
         Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetDelegateOfferModel getDelegateOfferModel);
+        /// <summary>
+        /// Will Update Every occurence of the user with the id with the new email parameter
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="newEmail"></param>
+        /// <returns></returns>
+        Task UpdateUserEmail(Guid id, string newEmail);
 
         /// <summary>
         /// Gets an product by id
@@ -49,5 +56,13 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <param name="id"></param>
         Task DeleteDelegateOffer(Guid id);
+
+        /// <summary>
+        /// Remove All Offers which has a user with id as provider
+        /// </summary>
+        /// <param name="id">of a user which is removed from the application</param>
+        /// <returns></returns>
+        Task RemoveDelegateOffersWithUser(Guid id);
+
     }
 }

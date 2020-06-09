@@ -30,6 +30,14 @@ namespace MarketplaceService.Repositories
         Task<DAppOffer> GetDAppOffer(Guid id);
         
         /// <summary>
+        /// Will Update Every occurence of the user with the id with the new email parameter
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="newEmail"></param>
+        /// <returns></returns>
+        Task UpdateUserEmail(Guid id, string newEmail);
+
+        /// <summary>
         /// Updates a DAppOffer
         /// </summary>
         /// <param name="id"></param>
@@ -38,7 +46,7 @@ namespace MarketplaceService.Repositories
         Task<DAppOffer> UpdateDAppOffer(Guid id, DAppOffer offerIn);
 
         /// <summary>
-        /// Updates a product
+        /// adds a delegate from Delegates currently in offer
         /// </summary>
         /// <param name="id"></param>
         /// <param name="offerIn"></param>
@@ -46,7 +54,7 @@ namespace MarketplaceService.Repositories
         Task<DAppOffer> AddDelegateToDAppOffer(Guid id, DAppOffer offerIn);
         
         /// <summary>
-        /// Updates a product
+        /// Removes a delegate from Delegates currently in offer
         /// </summary>
         /// <param name="id"></param>
         /// <param name="offerIn"></param>
@@ -64,5 +72,19 @@ namespace MarketplaceService.Repositories
         /// <param name="getDAppOfferModel">filter values</param>
         /// <returns></returns>
         Task<PagedList<DAppOffer>> GetAllDAppOffers(GetDAppOfferModel getDAppOfferModel);
+
+        /// <summary>
+        /// Remove All Offers which has a user with id as provider
+        /// </summary>
+        /// <param name="id">of a user which is removed from the application</param>
+        /// <returns></returns>
+        Task RemoveDAppOffersWithUser(Guid id);
+        /// <summary>
+        /// Will check every dapp offer if they have a delegate currently in offer with this id, if so it will remove the delegate from this offer
+        /// </summary>
+        /// <param name="id">of a user which is removed from the application</param>
+        /// <returns></returns>
+        Task RemoveDelegateFromAllOffersWithUser(Guid id);
+
     }
 }
