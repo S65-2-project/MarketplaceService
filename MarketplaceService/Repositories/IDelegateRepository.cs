@@ -25,9 +25,9 @@ namespace MarketplaceService.Repositories
         /// <summary>
         /// Get filtered list of products
         /// </summary>
-        /// <param name="getOfferModel"> filter parameters </param>
+        /// <param name="getDelegateOfferModel"> filter parameters </param>
         /// <returns> Pagedlist </returns>
-        Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel);
+        Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetDelegateOfferModel getDelegateOfferModel);
 
         /// <summary>
         /// Gets an product by id

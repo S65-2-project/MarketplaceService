@@ -76,10 +76,10 @@ namespace MarketplaceService.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetOfferModel getOfferModel)
+        public async Task<IActionResult> Get([FromQuery] GetDelegateOfferModel getDelegateOfferModel)
         {
             // gets offers that comply with the filters in the getOfferModel
-            var offers = await _delegateService.GetOffers(getOfferModel);
+            var offers = await _delegateService.GetOffers(getDelegateOfferModel);
 
             // make headerdata for the frontend
             var metadata = new

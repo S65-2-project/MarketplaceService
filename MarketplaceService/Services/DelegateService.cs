@@ -65,9 +65,9 @@ namespace MarketplaceService.Services
             await _delegateRepository.DeleteDelegateOffer(id);
         }
 
-        public async Task<PagedList<DelegateOffer>> GetOffers(GetOfferModel getOfferModel)
+        public async Task<PagedList<DelegateOffer>> GetOffers(GetDelegateOfferModel getDelegateOfferModel)
         {
-            return await _delegateRepository.GetAllDelegateOffers(getOfferModel);
+            return await _delegateRepository.GetAllDelegateOffers(getDelegateOfferModel);
         }
     }
 }
