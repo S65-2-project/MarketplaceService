@@ -51,37 +51,36 @@ public class DAppServiceTests
             Assert.IsType<EmptyFieldException>(result);
         }
 
-        //[Fact]
-        //public async Task CreateDAppOffer_Success()
-        //{
-        //    var userid = Guid.NewGuid();
-        //    const string titleText = "Title Text";
-        //    const string descriptionText = "Description Text";
-        //    const string jwt = "";
+        [Fact]
+        public async Task CreateDAppOffer_Success()
+        {
+            var userid = Guid.NewGuid();
+            const string titleText = "Title Text";
+            const string descriptionText = "Description Text";
+            const string jwt = "";
 
-        //    //DAppOffer product = new DAppOffer
-        //    //{
-        //    //    Title = titleText,
-        //    //    Description = descriptionText,
-        //    //    Provider = { Id = userid }
-        //    //};
+            DAppOffer product = new DAppOffer
+            {
+                Title = titleText,
+                Description = descriptionText,
+                Provider = new User() { Id = userid }
+            };
 
-        //    //var createProductModel = new CreateDAppOfferModel
-        //    //{
-        //    //    Title = titleText,
-        //    //    Description = descriptionText,
-        //    //    Provider = {Id = userid}
-        //    //};
+            var createProductModel = new CreateDAppOfferModel
+            {
+                Title = titleText,
+                Description = descriptionText,
+                Provider = new User(){ Id = userid }
+            };
 
-        //    //_dAppRepository.Setup(x => x.CreateDAppOffer(It.IsAny<DAppOffer>())).ReturnsAsync(product);
-        //    //_jwtIdClaimReaderHelper.Setup(x => x.getUserIdFromToken(jwt)).Returns(userid);
+            _dAppRepository.Setup(x => x.CreateDAppOffer(It.IsAny<DAppOffer>())).ReturnsAsync(product);
+            _jwtIdClaimReaderHelper.Setup(x => x.getUserIdFromToken(jwt)).Returns(userid);
 
 
-        //    //var result = await _dAppService.CreateDAppOffer(createProductModel, jwt);
+            var result = await _dAppService.CreateDAppOffer(createProductModel, jwt);
 
-        //    //Assert.Equal(titleText, result.Title);
-        //    //TODO: Fix this niet mijn verantwoordelijkheid shiet er een bug voor in.
-        //}
+            Assert.Equal(titleText, result.Title);
+        }
 
         [Fact]
         public async Task UpdateProduct_EmptyTitleFailed()
@@ -121,44 +120,46 @@ public class DAppServiceTests
             Assert.IsType<EmptyFieldException>(result);
         }
 
-        //[Fact]
-        //public async Task UpdateDAppOffer_Success()
-        //{
-        //    //const string titleText = "Title Text";
-        //    //const string descriptionText = "Description Text";
-        //    //var id = Guid.NewGuid();
-        //    //const string jwt = "";
-        //    //var product = new DAppOffer
-        //    //{
-        //    //    Id = id,
-        //    //    Title = titleText,
-        //    //    Description = descriptionText
-        //    //};
+        [Fact]
+        public async Task UpdateDAppOffer_Success()
+        {
+            const string titleText = "Title Text";
+            const string descriptionText = "Description Text";
+            var id = Guid.NewGuid();
+            var userid = Guid.NewGuid();
+            const string jwt = "";
+            var product = new DAppOffer
+            {
+                Id = id,
+                Title = titleText,
+                Description = descriptionText,
+                Provider = new User() { Id = userid }
+            };
 
-        //    //var updatedProduct = new DAppOffer
-        //    //{
-        //    //    Id = id,
-        //    //    Title = "New Title",
-        //    //    Description = "New Description"
-        //    //};
+            var updatedProduct = new DAppOffer
+            {
+                Id = id,
+                Title = "New Title",
+                Description = "New Description",
+                Provider = new User() { Id = userid}
+            };
 
-        //    //var updateProductModel = new UpdateDAppOfferModel
-        //    //{
-        //    //    Title = updatedProduct.Title,
-        //    //    Description = updatedProduct.Description
-        //    //};
-        //    //_dAppRepository .Setup(x => x.GetDAppOffer(product.Id)).ReturnsAsync(product);
-        //    //_dAppRepository .Setup(x =>
-        //    //    x.UpdateDAppOffer(product.Id, product)).ReturnsAsync(updatedProduct);
+            var updateProductModel = new UpdateDAppOfferModel
+            {
+                Title = updatedProduct.Title,
+                Description = updatedProduct.Description,
+            };
+            _dAppRepository.Setup(x => x.GetDAppOffer(product.Id)).ReturnsAsync(product);
+            _dAppRepository.Setup(x =>
+               x.UpdateDAppOffer(product.Id, product)).ReturnsAsync(updatedProduct);
+            _jwtIdClaimReaderHelper.Setup(x => x.getUserIdFromToken(jwt)).Returns(userid);
 
-        //    //var result = await _dAppService.UpdateDAppOffer(product.Id, updateProductModel, jwt);
+            var result = await _dAppService.UpdateDAppOffer(product.Id, updateProductModel, jwt);
 
-        //    //Assert.NotNull(result);
-        //    //Assert.Equal(updatedProduct, result);
-        //    //Assert.NotEqual(titleText, result.Description);
-        //    //Assert.NotEqual(descriptionText, result.Title);
-        //    //TODO: Fix this niet mijn verantwoordelijkheid shiet er een bug voor in.
-
-        //}
+            Assert.NotNull(result);
+            Assert.Equal(updatedProduct, result);
+            Assert.NotEqual(titleText, result.Description);
+            Assert.NotEqual(descriptionText, result.Title);
+        }
     }
 }

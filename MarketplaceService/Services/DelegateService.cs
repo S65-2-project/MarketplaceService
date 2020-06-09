@@ -38,7 +38,8 @@ namespace MarketplaceService.Services
                 LiskPerMonth = creatDelegateOfferModel.LiskPerMonth,
                 AvailableForInMonths = creatDelegateOfferModel.AvailableForInMonths
             };
-            if(delegateOffer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
+            var id = _jwtIdClaimReaderHelper.getUserIdFromToken(jwt);
+            if (delegateOffer.Provider.Id != id)
             {
                 throw new NotAuthorisedException();
             }
@@ -57,7 +58,7 @@ namespace MarketplaceService.Services
                 throw new EmptyFieldException();
 
             var delegateOffer = await GetDelegateOffer(id);
-            if(delegateOffer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
+            if(delegateOffer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
             {
                 throw new NotAuthorisedException();
             }
