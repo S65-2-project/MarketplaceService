@@ -78,23 +78,30 @@ namespace MarketplaceService.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetDAppOfferModel getDAppOfferModel)
         {
-            // gets offers that comply with the filters in the getOfferModel
-            var offers = await _dAppService.GetOffers(getDAppOfferModel);
-
-            // make headerdata for the frontend
-            var metadata = new
+            try
             {
-                offers.TotalCount,
-                offers.PageSize,
-                offers.CurrentPage,
-                offers.TotalPages,
-                offers.HasNext,
-                offers.HasPrevious
-            };
+                // gets offers that comply with the filters in the getOfferModel
+                var offers = await _dAppService.GetOffers(getDAppOfferModel);
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                // make headerdata for the frontend
+                var metadata = new
+                {
+                    offers.TotalCount,
+                    offers.PageSize,
+                    offers.CurrentPage,
+                    offers.TotalPages,
+                    offers.HasNext,
+                    offers.HasPrevious
+                };
 
-            return Ok(offers);
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return Ok(offers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
         }
     }
 }
