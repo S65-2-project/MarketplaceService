@@ -34,7 +34,8 @@ namespace MarketplaceService.Controllers
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> CreateDelegateOffer([FromBody] CreateDelegateOfferModel createDelegateOfferModel)
+        public async Task<IActionResult> CreateDelegateOffer(
+            [FromBody] CreateDelegateOfferModel createDelegateOfferModel)
         {
             try
             {
@@ -76,25 +77,32 @@ namespace MarketplaceService.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetOfferModel getOfferModel)
+        public async Task<IActionResult> Get([FromQuery] GetDelegateOfferModel getDelegateOfferModel)
         {
-            // gets offers that comply with the filters in the getOfferModel
-            var offers = await _delegateService.GetOffers(getOfferModel);
-
-            // make headerdata for the frontend
-            var metadata = new
+            try
             {
-                offers.TotalCount,
-                offers.PageSize,
-                offers.CurrentPage,
-                offers.TotalPages,
-                offers.HasNext,
-                offers.HasPrevious
-            };
+                // gets offers that comply with the filters in the getOfferModel
+                var offers = await _delegateService.GetOffers(getDelegateOfferModel);
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                // make headerdata for the frontend
+                var metadata = new
+                {
+                    offers.TotalCount,
+                    offers.PageSize,
+                    offers.CurrentPage,
+                    offers.TotalPages,
+                    offers.HasNext,
+                    offers.HasPrevious
+                };
 
-            return Ok(offers);
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return Ok(offers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
         }
     }
 }

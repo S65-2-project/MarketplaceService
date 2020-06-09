@@ -25,10 +25,9 @@ namespace MarketplaceService.Repositories
         /// <summary>
         /// Get filtered list of products
         /// </summary>
-        /// <param name="getOfferModel"> filter parameters </param>
+        /// <param name="getDelegateOfferModel"> filter parameters </param>
         /// <returns> Pagedlist </returns>
-        Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetOfferModel getOfferModel);
-        
+        Task<PagedList<DelegateOffer>> GetAllDelegateOffers(GetDelegateOfferModel getDelegateOfferModel);
         /// <summary>
         /// Will Update Every occurence of the user with the id with the new email parameter
         /// </summary>

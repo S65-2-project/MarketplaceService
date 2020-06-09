@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
 using MarketplaceService.Models;
@@ -91,6 +92,11 @@ namespace MarketplaceService.Services
         public async Task DeleteDAppOffer(Guid id)
         {
             await _dAppRepository.DeleteDAppOffer(id);
+        }
+
+        public async Task<PagedList<DAppOffer>> GetOffers(GetDAppOfferModel getDAppOfferModel)
+        {
+            return await _dAppRepository.GetAllDAppOffers(getDAppOfferModel);
         }
     }
 }

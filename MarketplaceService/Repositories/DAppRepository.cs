@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MarketplaceService.DatastoreSettings;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Domain;
+using MarketplaceService.Models;
 using MongoDB.Driver;
 
 namespace MarketplaceService.Repositories
@@ -44,6 +47,27 @@ namespace MarketplaceService.Repositories
         public async Task DeleteDAppOffer(Guid id)
         {
             await _dAppOffers.DeleteManyAsync(f => f.Id == id);
+        }
+
+        public async Task<PagedList<DAppOffer>> GetAllDAppOffers(GetDAppOfferModel getDAppOfferModel)
+        {
+            // Retrieve the collection as queryable
+            var offers = _dAppOffers.AsQueryable().OrderBy(on => on.LiskPerMonth).AsQueryable();
+
+            // Apply filters
+            if (getDAppOfferModel.MinReward != null)
+                offers = offers.Where(o => o.LiskPerMonth >= getDAppOfferModel.MinReward);
+
+            if (getDAppOfferModel.MaxReward != null)
+                offers = offers.Where(o => o.LiskPerMonth <= getDAppOfferModel.MaxReward);
+
+            if (!string.IsNullOrEmpty(getDAppOfferModel.SearchQuery))
+                offers = offers.Where(o => o.Title.ToLower().Contains(getDAppOfferModel.SearchQuery.ToLower()));
+
+            if (!string.IsNullOrEmpty(getDAppOfferModel.RegionQuery))
+                offers = offers.Where(o => o.Region.ToLower().Contains(getDAppOfferModel.RegionQuery.ToLower()));
+
+            return await PagedList<DAppOffer>.ToPagedList(offers, getDAppOfferModel.PageNumber, getDAppOfferModel.PageSize);
         }
 
         public async Task<DAppOffer> AddDelegateToDAppOffer(Guid id, DAppOffer offerIn)

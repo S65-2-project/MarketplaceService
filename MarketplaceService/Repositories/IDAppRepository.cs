@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MarketplaceService.DataTypes;
 using MarketplaceService.Domain;
+using MarketplaceService.Models;
 
 namespace MarketplaceService.Repositories
 {
@@ -64,6 +66,12 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <param name="id"></param>
         Task DeleteDAppOffer(Guid id);
+        /// <summary>
+        /// Gets offers that comply with filters
+        /// </summary>
+        /// <param name="getDAppOfferModel">filter values</param>
+        /// <returns></returns>
+        Task<PagedList<DAppOffer>> GetAllDAppOffers(GetDAppOfferModel getDAppOfferModel);
 
         /// <summary>
         /// Remove All Offers which has a user with id as provider
