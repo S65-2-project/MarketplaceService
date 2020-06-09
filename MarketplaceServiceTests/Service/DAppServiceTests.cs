@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using marketplaceservice.Helpers;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
 using MarketplaceService.Models;
@@ -14,11 +15,13 @@ public class DAppServiceTests
     {
         private readonly IDAppService _dAppService;
         private readonly Mock<IDAppRepository> _dAppRepository ;
+        private readonly Mock<IJwtIdClaimReaderHelper> _jwtIdClaimReaderHelper;
         
         public DAppServiceTests()
         {
             _dAppRepository  = new Mock<IDAppRepository>();
-            _dAppService = new DAppService(_dAppRepository .Object);
+            _jwtIdClaimReaderHelper = new Mock<IJwtIdClaimReaderHelper>();
+            _dAppService = new DAppService(_dAppRepository.Object, _jwtIdClaimReaderHelper.Object);
         }
 
         [Fact]
@@ -26,6 +29,7 @@ public class DAppServiceTests
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var product = new DAppOffer
             {
@@ -41,7 +45,7 @@ public class DAppServiceTests
             _dAppRepository .Setup(x => x.CreateDAppOffer(It.IsAny<DAppOffer>())).ReturnsAsync(product);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                    _dAppService.CreateDAppOffer(createProductModel));
+                    _dAppService.CreateDAppOffer(createProductModel, jwt));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
@@ -52,6 +56,7 @@ public class DAppServiceTests
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var product = new DAppOffer
             {
@@ -67,7 +72,7 @@ public class DAppServiceTests
 
             _dAppRepository .Setup(x => x.CreateDAppOffer(It.IsAny<DAppOffer>())).ReturnsAsync(product);
 
-            var result = await _dAppService.CreateDAppOffer(createProductModel);
+            var result = await _dAppService.CreateDAppOffer(createProductModel, jwt);
 
             Assert.Equal(product.Title, result.Title);
         }
@@ -78,6 +83,7 @@ public class DAppServiceTests
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
+            const string jwt = "";
 
             var product = new DAppOffer
             {
@@ -103,7 +109,7 @@ public class DAppServiceTests
                 x.UpdateDAppOffer(product.Id, product)).ReturnsAsync(updatedProduct);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                _dAppService.UpdateDAppOffer(product.Id, updateProductModel));
+                _dAppService.UpdateDAppOffer(product.Id, updateProductModel, jwt));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
@@ -115,7 +121,7 @@ public class DAppServiceTests
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
-
+            const string jwt = "";
             var product = new DAppOffer
             {
                 Id = id,
@@ -139,7 +145,7 @@ public class DAppServiceTests
             _dAppRepository .Setup(x =>
                 x.UpdateDAppOffer(product.Id, product)).ReturnsAsync(updatedProduct);
 
-            var result = await _dAppService.UpdateDAppOffer(product.Id, updateProductModel);
+            var result = await _dAppService.UpdateDAppOffer(product.Id, updateProductModel, jwt);
 
             Assert.NotNull(result);
             Assert.Equal(updatedProduct, result);

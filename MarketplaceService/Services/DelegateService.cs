@@ -7,19 +7,23 @@ using MarketplaceService.Exceptions;
 using MarketplaceService.DataTypes;
 using MarketplaceService.Models;
 using MarketplaceService.Repositories;
+using marketplaceservice.Helpers;
+using marketplaceservice.Exceptions;
 
 namespace MarketplaceService.Services
 {
     public class DelegateService : IDelegateService
     {
         private readonly IDelegateRepository _delegateRepository;
+        private readonly IJwtIdClaimReaderHelper _jwtIdClaimReaderHelper;
 
-        public DelegateService(IDelegateRepository delegateRepository)
+        public DelegateService(IDelegateRepository delegateRepository, IJwtIdClaimReaderHelper jwtIdClaimReaderHelper)
         {
             _delegateRepository = delegateRepository;
+            _jwtIdClaimReaderHelper = jwtIdClaimReaderHelper;
         }
 
-        public async Task<DelegateOffer> CreateDelegateOffer(CreateDelegateOfferModel creatDelegateOfferModel)
+        public async Task<DelegateOffer> CreateDelegateOffer(CreateDelegateOfferModel creatDelegateOfferModel, string jwt)
         {
             if (string.IsNullOrEmpty(creatDelegateOfferModel.Title) || string.IsNullOrEmpty(creatDelegateOfferModel.Description))
                 throw new EmptyFieldException();
@@ -34,6 +38,10 @@ namespace MarketplaceService.Services
                 LiskPerMonth = creatDelegateOfferModel.LiskPerMonth,
                 AvailableForInMonths = creatDelegateOfferModel.AvailableForInMonths
             };
+            if(delegateOffer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
+            {
+                throw new NotAuthorisedException();
+            }
 
             return await _delegateRepository.CreateDelegateOffer(delegateOffer);
         }
@@ -43,13 +51,16 @@ namespace MarketplaceService.Services
             return await _delegateRepository.GetDelegateOffer(id);
         }
 
-        public async Task<DelegateOffer> UpdateDelegateOffer(Guid id, UpdateDelegateOfferModel updateDelegateOfferModel)
+        public async Task<DelegateOffer> UpdateDelegateOffer(Guid id, UpdateDelegateOfferModel updateDelegateOfferModel, string jwt)
         {
             if (string.IsNullOrEmpty(updateDelegateOfferModel.Title) || string.IsNullOrEmpty(updateDelegateOfferModel.Description))
                 throw new EmptyFieldException();
 
             var delegateOffer = await GetDelegateOffer(id);
-
+            if(delegateOffer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
+            {
+                throw new NotAuthorisedException();
+            }
             delegateOffer.Id = id;
             delegateOffer.Title = updateDelegateOfferModel.Title;
             delegateOffer.Description = updateDelegateOfferModel.Description;
@@ -60,8 +71,13 @@ namespace MarketplaceService.Services
             return await _delegateRepository.UpdateDelegateOffer(id, delegateOffer);
         }
 
-        public async Task DeleteDelegateOffer(Guid id)
+        public async Task DeleteDelegateOffer(Guid id, string jwt)
         {
+            var offer = await _delegateRepository.GetDelegateOffer(id);
+            if(offer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
+            {
+                throw new NotAuthorisedException();
+            }
             await _delegateRepository.DeleteDelegateOffer(id);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using marketplaceservice.Helpers;
 using MarketplaceService.Controllers;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
@@ -15,11 +16,13 @@ namespace MarketplaceServiceTests.Controller
     {
         private readonly DAppController _dAppController;
         private readonly Mock<IDAppService> _dAppService;
+        private readonly Mock<IJwtIdClaimReaderHelper> _jwtIdClaimReaderHelper;
 
         public DAppControllerTests()
         {
             _dAppService = new Mock<IDAppService>();
             _dAppController = new DAppController(_dAppService.Object);
+            _jwtIdClaimReaderHelper = new Mock<IJwtIdClaimReaderHelper>();
         }
 
         [Fact]
@@ -29,17 +32,19 @@ namespace MarketplaceServiceTests.Controller
             var guid = Guid.NewGuid();
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
-
+            const string jwt = "";
             var productModel = new CreateDAppOfferModel() {
                 Title = titleText,
                 Description = descriptionText
             };
+            _jwtIdClaimReaderHelper.Setup(x => x.getUserIdFromToken(jwt)).Returns(guid);
 
-            _dAppService.Setup(x => x.CreateDAppOffer(productModel))
+
+            _dAppService.Setup(x => x.CreateDAppOffer(productModel, jwt))
                 .Throws<EmptyFieldException>();
 
             //Act
-            var result = await _dAppController.CreateDAppOffer(productModel);
+            var result = await _dAppController.CreateDAppOffer(productModel, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -49,8 +54,10 @@ namespace MarketplaceServiceTests.Controller
         [Fact]
         public async Task CreateDAppOffer_Success()
         {
+            var userid = Guid.NewGuid();
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var product = new DAppOffer()
             {
@@ -60,13 +67,16 @@ namespace MarketplaceServiceTests.Controller
 
             var createProductModel = new CreateDAppOfferModel()
             {
+                Provider = new User { Id = userid },
                 Title = titleText,
                 Description = descriptionText
             };
+            _jwtIdClaimReaderHelper.Setup(x => x.getUserIdFromToken(jwt)).Returns(userid);
 
-            _dAppService.Setup(x => x.CreateDAppOffer(createProductModel)).ReturnsAsync(product);
 
-            var result = await _dAppController.CreateDAppOffer(createProductModel) as ObjectResult;
+            _dAppService.Setup(x => x.CreateDAppOffer(createProductModel, jwt)).ReturnsAsync(product);
+
+            var result = await _dAppController.CreateDAppOffer(createProductModel, jwt) as ObjectResult;
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
@@ -78,11 +88,12 @@ namespace MarketplaceServiceTests.Controller
         {
             //Arrange
             var guid = Guid.NewGuid();
+            const string jwt = "";
 
-            _dAppService.Setup(x => x.DeleteDAppOffer(guid)).Throws<ProductDeleteException>();
+            _dAppService.Setup(x => x.DeleteDAppOffer(guid, jwt)).Throws<ProductDeleteException>();
 
             //Act
-            var result = await _dAppController.DeleteDAppOffer(guid);
+            var result = await _dAppController.DeleteDAppOffer(guid, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -94,11 +105,12 @@ namespace MarketplaceServiceTests.Controller
         {
             //Arrange
             var guid = Guid.NewGuid();
+            const string jwt = "";
 
-            _dAppService.Setup(x => x.DeleteDAppOffer(guid));
+            _dAppService.Setup(x => x.DeleteDAppOffer(guid, jwt));
 
             //Act
-            var result = await _dAppController.DeleteDAppOffer(guid);
+            var result = await _dAppController.DeleteDAppOffer(guid, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -164,17 +176,17 @@ namespace MarketplaceServiceTests.Controller
             var guid = Guid.NewGuid();
             const string titleText = "Title1";
             const string descriptionText = "Description1";
-
+            const string jwt = "";
             var updateProductModel = new UpdateDAppOfferModel
             {
                 Title = titleText,
                 Description = descriptionText
             };
 
-            _dAppService.Setup(x => x.UpdateDAppOffer(guid, updateProductModel)).Throws<OfferUpdateFailedException>();
+            _dAppService.Setup(x => x.UpdateDAppOffer(guid, updateProductModel, jwt)).Throws<OfferUpdateFailedException>();
 
             //Act
-            var result = await _dAppController.UpdateDAppOffer(guid, updateProductModel);
+            var result = await _dAppController.UpdateDAppOffer(guid, updateProductModel, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -188,6 +200,7 @@ namespace MarketplaceServiceTests.Controller
             var guid = Guid.NewGuid();
             const string titleText = "Title1";
             const string descriptionText = "Description1";
+            const string jwt = "";
 
             var updateProductModel = new UpdateDAppOfferModel
             {
@@ -202,10 +215,10 @@ namespace MarketplaceServiceTests.Controller
                 Description = descriptionText
             };
 
-            _dAppService.Setup(x => x.UpdateDAppOffer(guid, updateProductModel)).ReturnsAsync(product1);
+            _dAppService.Setup(x => x.UpdateDAppOffer(guid, updateProductModel, jwt )).ReturnsAsync(product1);
 
             //Act
-            var result = await _dAppController.UpdateDAppOffer(guid, updateProductModel) as ObjectResult;
+            var result = await _dAppController.UpdateDAppOffer(guid, updateProductModel, jwt) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);

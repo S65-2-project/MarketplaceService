@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using marketplaceservice.Helpers;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
 using MarketplaceService.Models;
@@ -14,11 +15,14 @@ namespace MarketplaceServiceTests.Service
     {
         private readonly IDelegateService _marketplaceService;
         private readonly Mock<IDelegateRepository> _marketplaceRepository ;
-        
+        private readonly Mock<IJwtIdClaimReaderHelper> _jwtIdClaimReaderHelper;
+
+
         public DelegateServiceTests()
         {
             _marketplaceRepository  = new Mock<IDelegateRepository>();
-            _marketplaceService = new DelegateService(_marketplaceRepository .Object);
+            _jwtIdClaimReaderHelper = new Mock<IJwtIdClaimReaderHelper>();
+            _marketplaceService = new DelegateService(_marketplaceRepository.Object, _jwtIdClaimReaderHelper.Object);
         }
 
         [Fact]
@@ -26,6 +30,7 @@ namespace MarketplaceServiceTests.Service
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var product = new DelegateOffer
             {
@@ -41,7 +46,7 @@ namespace MarketplaceServiceTests.Service
             _marketplaceRepository .Setup(x => x.CreateDelegateOffer(It.IsAny<DelegateOffer>())).ReturnsAsync(product);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                    _marketplaceService.CreateDelegateOffer(createProductModel));
+                    _marketplaceService.CreateDelegateOffer(createProductModel, jwt));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
@@ -52,6 +57,7 @@ namespace MarketplaceServiceTests.Service
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var product = new DelegateOffer
             {
@@ -67,7 +73,7 @@ namespace MarketplaceServiceTests.Service
 
             _marketplaceRepository .Setup(x => x.CreateDelegateOffer(It.IsAny<DelegateOffer>())).ReturnsAsync(product);
 
-            var result = await _marketplaceService.CreateDelegateOffer(createProductModel);
+            var result = await _marketplaceService.CreateDelegateOffer(createProductModel, jwt);
 
             Assert.Equal(product.Title, result.Title);
         }
@@ -78,6 +84,7 @@ namespace MarketplaceServiceTests.Service
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
+            const string jwt = "";
 
             var product = new DelegateOffer
             {
@@ -103,7 +110,7 @@ namespace MarketplaceServiceTests.Service
                 x.UpdateDelegateOffer(product.Id, product)).ReturnsAsync(updatedProduct);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                _marketplaceService.UpdateDelegateOffer(product.Id, updateProductModel));
+                _marketplaceService.UpdateDelegateOffer(product.Id, updateProductModel, jwt));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
@@ -115,6 +122,8 @@ namespace MarketplaceServiceTests.Service
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
+            const string jwt = "";
+
 
             var product = new DelegateOffer
             {
@@ -139,7 +148,7 @@ namespace MarketplaceServiceTests.Service
             _marketplaceRepository .Setup(x =>
                 x.UpdateDelegateOffer(product.Id, product)).ReturnsAsync(updatedProduct);
 
-            var result = await _marketplaceService.UpdateDelegateOffer(product.Id, updateProductModel);
+            var result = await _marketplaceService.UpdateDelegateOffer(product.Id, updateProductModel, jwt);
 
             Assert.NotNull(result);
             Assert.Equal(updatedProduct, result);

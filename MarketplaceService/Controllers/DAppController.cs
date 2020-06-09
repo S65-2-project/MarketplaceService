@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MarketplaceService.Domain;
 using MarketplaceService.Models;
 using MarketplaceService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarketplaceService.Controllers
@@ -32,13 +33,14 @@ namespace MarketplaceService.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> CreateDAppOffer([FromBody] CreateDAppOfferModel createDAppOfferModel)
+        public async Task<IActionResult> CreateDAppOffer([FromBody] CreateDAppOfferModel createDAppOfferModel, [FromHeader(Name = "Authorization")] string jwt)
         {
             try
             {
-                return Ok(await _dAppService.CreateDAppOffer(createDAppOfferModel));
+                return Ok(await _dAppService.CreateDAppOffer(createDAppOfferModel,jwt));
             }
             catch (Exception e)
             {
@@ -46,13 +48,14 @@ namespace MarketplaceService.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteDAppOffer(Guid id)
+        public async Task<IActionResult> DeleteDAppOffer(Guid id,[FromHeader(Name = "Authorization")] string jwt)
         {
             try
             {
-                await _dAppService.DeleteDAppOffer(id);
+                await _dAppService.DeleteDAppOffer(id, jwt);
                 return Ok();
             }
             catch (Exception e)
@@ -60,14 +63,15 @@ namespace MarketplaceService.Controllers
                 return BadRequest(e.Message);
             }
         }
-
+        
+        [Authorize]
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateDAppOffer(Guid id, UpdateDAppOfferModel updateDAppOfferModel)
+        public async Task<IActionResult> UpdateDAppOffer(Guid id, UpdateDAppOfferModel updateDAppOfferModel, [FromHeader(Name = "Authorization")] string jwt)
         {
             try
             {
-                return Ok(await _dAppService.UpdateDAppOffer(id, updateDAppOfferModel));
+                return Ok(await _dAppService.UpdateDAppOffer(id, updateDAppOfferModel, jwt));
             }
             catch (Exception e)
             {

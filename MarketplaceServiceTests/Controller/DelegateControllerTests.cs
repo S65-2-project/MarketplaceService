@@ -29,6 +29,7 @@ namespace MarketplaceServiceTests.Controller
             var guid = Guid.NewGuid();
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var productModel = new CreateDelegateOfferModel() {
                 Guid = guid,
@@ -36,11 +37,11 @@ namespace MarketplaceServiceTests.Controller
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.CreateDelegateOffer(productModel))
+            _delegateService.Setup(x => x.CreateDelegateOffer(productModel, jwt))
                 .Throws<EmptyFieldException>();
 
             //Act
-            var result = await _delegateController.CreateDelegateOffer(productModel);
+            var result = await _delegateController.CreateDelegateOffer(productModel, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -52,6 +53,7 @@ namespace MarketplaceServiceTests.Controller
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var guid = Guid.NewGuid();
 
@@ -69,9 +71,9 @@ namespace MarketplaceServiceTests.Controller
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.CreateDelegateOffer(createProductModel)).ReturnsAsync(product);
+            _delegateService.Setup(x => x.CreateDelegateOffer(createProductModel, jwt)).ReturnsAsync(product);
 
-            var result = await _delegateController.CreateDelegateOffer(createProductModel) as ObjectResult;
+            var result = await _delegateController.CreateDelegateOffer(createProductModel, jwt) as ObjectResult;
 
             Assert.NotNull(result);
             Assert.IsType<OkObjectResult>(result);
@@ -83,11 +85,12 @@ namespace MarketplaceServiceTests.Controller
         {
             //Arrange
             var guid = Guid.NewGuid();
+            const string jwt = "";
 
-            _delegateService.Setup(x => x.DeleteDelegateOffer(guid)).Throws<ProductDeleteException>();
+            _delegateService.Setup(x => x.DeleteDelegateOffer(guid, jwt)).Throws<ProductDeleteException>();
 
             //Act
-            var result = await _delegateController.DeleteDelegateOffer(guid);
+            var result = await _delegateController.DeleteDelegateOffer(guid, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -99,11 +102,12 @@ namespace MarketplaceServiceTests.Controller
         {
             //Arrange
             var guid = Guid.NewGuid();
+            const string jwt = "";
 
-            _delegateService.Setup(x => x.DeleteDelegateOffer(guid));
+            _delegateService.Setup(x => x.DeleteDelegateOffer(guid, jwt));
 
             //Act
-            var result = await _delegateController.DeleteDelegateOffer(guid);
+            var result = await _delegateController.DeleteDelegateOffer(guid, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -169,6 +173,7 @@ namespace MarketplaceServiceTests.Controller
             var guid = Guid.NewGuid();
             const string titleText = "Title1";
             const string descriptionText = "Description1";
+            const string jwt = "";
 
             var updateProductModel = new UpdateDelegateOfferModel
             {
@@ -176,10 +181,10 @@ namespace MarketplaceServiceTests.Controller
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel)).Throws<OfferUpdateFailedException>();
+            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel, jwt)).Throws<OfferUpdateFailedException>();
 
             //Act
-            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel);
+            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel, jwt);
 
             //Assert
             Assert.NotNull(result);
@@ -193,6 +198,7 @@ namespace MarketplaceServiceTests.Controller
             var guid = Guid.NewGuid();
             const string titleText = "Title1";
             const string descriptionText = "Description1";
+            const string jwt = "";
 
             var updateProductModel = new UpdateDelegateOfferModel
             {
@@ -207,10 +213,10 @@ namespace MarketplaceServiceTests.Controller
                 Description = descriptionText
             };
 
-            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel)).ReturnsAsync(product1);
+            _delegateService.Setup(x => x.UpdateDelegateOffer(guid, updateProductModel, jwt)).ReturnsAsync(product1);
 
             //Act
-            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel) as ObjectResult;
+            var result = await _delegateController.UpdateDelegateOffer(guid, updateProductModel, jwt) as ObjectResult;
 
             //Assert
             Assert.NotNull(result);
