@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using MessageBroker;
+using marketplaceservice.MessageHandlers;
 
 namespace MarketplaceService
 {
@@ -31,6 +33,7 @@ namespace MarketplaceService
             services.AddSingleton<IMarketplaceDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<MarketplaceDatabaseSettings>>().Value);
 
+
             //Repositories
             services.AddTransient<IDelegateRepository, DelegateRepository>();
             services.AddTransient<IDAppRepository, DAppRepository>();
@@ -39,7 +42,10 @@ namespace MarketplaceService
             services.AddTransient<IDAppService, DAppService>();
             //Controllers
             services.AddControllers();
-            
+            //Message Consumer
+            services.AddMessageConsumer(Configuration["MessageQueueSettings:Uri"],
+                "MarketplaceService",
+                builder => builder.WithHandler<DeleteUserMessageHandler>("delete-user").WithHandler<UpdateUserMessageHandler>("update-user"));
             services.AddCors();
             
             services.AddHealthChecks().AddCheck("healthy", () => HealthCheckResult.Healthy());

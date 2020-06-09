@@ -7,6 +7,7 @@ using MarketplaceService.Domain;
 using MarketplaceService.DataTypes;
 using MarketplaceService.Models;
 using MongoDB.Driver;
+using Newtonsoft.Json.Schema;
 
 namespace MarketplaceService.Repositories
 {
@@ -75,6 +76,26 @@ namespace MarketplaceService.Repositories
         {
             await _delegateOffers.DeleteManyAsync(f => f.Id == id);
             return;
+        }
+
+        public async Task UpdateUserEmail(Guid id, string newEmail)
+        {
+            var listProvidersWithId = await _delegateOffers.Find(offer => offer.Provider.Id == id).ToListAsync();
+            foreach (var _delegate in listProvidersWithId)
+            {
+                _delegate.Provider.Name = newEmail;
+                await UpdateDelegateOffer(_delegate.Id, _delegate);
+            }
+        }
+
+        public async Task RemoveDelegateOffersWithUser(Guid id)
+        {
+            var listProvidersWithId = await _delegateOffers.Find(offer => offer.Provider.Id == id).ToListAsync();
+            foreach(var _delegate in listProvidersWithId)
+            {
+                await DeleteDelegateOffer(_delegate.Id);
+            }
+
         }
     }
 }
