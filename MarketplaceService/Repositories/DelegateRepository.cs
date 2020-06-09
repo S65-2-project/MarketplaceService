@@ -88,7 +88,7 @@ namespace MarketplaceService.Repositories
             }
         }
 
-        public async Task RemoveDelegateOffersWithuser(Guid id)
+        public async Task RemoveDelegateOffersWithUser(Guid id)
         {
             var listProvidersWithId = await _delegateOffers.Find(offer => offer.Provider.Id == id).ToListAsync();
             foreach(var _delegate in listProvidersWithId)

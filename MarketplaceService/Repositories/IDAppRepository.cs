@@ -70,13 +70,13 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <param name="id">of a user which is removed from the application</param>
         /// <returns></returns>
-        Task RemoveDAppOffersWithuser(Guid id);
+        Task RemoveDAppOffersWithUser(Guid id);
         /// <summary>
         /// Will check every dapp offer if they have a delegate currently in offer with this id, if so it will remove the delegate from this offer
         /// </summary>
         /// <param name="id">of a user which is removed from the application</param>
         /// <returns></returns>
-        Task RemoveDelegateFromAllOffersWithuser(Guid id);
+        Task RemoveDelegateFromAllOffersWithUser(Guid id);
 
     }
 }

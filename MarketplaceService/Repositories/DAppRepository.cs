@@ -58,12 +58,12 @@ namespace MarketplaceService.Repositories
             return offerIn;
         }
 
-        public async Task RemoveDAppOffersWithuser(Guid id)
+        public async Task RemoveDAppOffersWithUser(Guid id)
         {
             await _dAppOffers.DeleteManyAsync(offer => offer.Provider.Id == id);
         }
 
-        public async Task RemoveDelegateFromAllOffersWithuser(Guid id)
+        public async Task RemoveDelegateFromAllOffersWithUser(Guid id)
         {
             var listDAppsWithUserThatIsGonnaBeRemoved = await _dAppOffers.Find(offer => offer.DelegatesCurrentlyInOffer.Exists(user => user.Id == id)).ToListAsync(); //get all offer which has the user with id
             foreach(var dapp in listDAppsWithUserThatIsGonnaBeRemoved)

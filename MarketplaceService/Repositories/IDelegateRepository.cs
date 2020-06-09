@@ -63,7 +63,7 @@ namespace MarketplaceService.Repositories
         /// </summary>
         /// <param name="id">of a user which is removed from the application</param>
         /// <returns></returns>
-        Task RemoveDelegateOffersWithuser(Guid id);
+        Task RemoveDelegateOffersWithUser(Guid id);
 
     }
 }

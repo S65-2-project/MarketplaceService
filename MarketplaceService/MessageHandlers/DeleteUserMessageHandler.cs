@@ -20,9 +20,9 @@ namespace marketplaceservice.MessageHandlers
         }
         public Task HandleMessageAsync(string messageType, DeleteUserMessage sendable)
         {
-            _dAppRepository.RemoveDAppOffersWithuser(sendable.Id);
-            _dAppRepository.RemoveDelegateFromAllOffersWithuser(sendable.Id);
-            _delegateRepository.RemoveDelegateOffersWithuser(sendable.Id);
+            _dAppRepository.RemoveDAppOffersWithUser(sendable.Id);
+            _dAppRepository.RemoveDelegateFromAllOffersWithUser(sendable.Id);
+            _delegateRepository.RemoveDelegateOffersWithUser(sendable.Id);
             return Task.CompletedTask;
         }
 
