@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using marketplaceservice.Helpers;
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
 using MarketplaceService.Models;
@@ -14,11 +15,13 @@ public class DAppServiceTests
     {
         private readonly IDAppService _dAppService;
         private readonly Mock<IDAppRepository> _dAppRepository ;
+        private readonly Mock<IJwtIdClaimReaderHelper> _jwtIdClaimReaderHelper;
         
         public DAppServiceTests()
         {
             _dAppRepository  = new Mock<IDAppRepository>();
-            _dAppService = new DAppService(_dAppRepository .Object);
+            _jwtIdClaimReaderHelper = new Mock<IJwtIdClaimReaderHelper>();
+            _dAppService = new DAppService(_dAppRepository.Object, _jwtIdClaimReaderHelper.Object);
         }
 
         [Fact]
@@ -26,6 +29,7 @@ public class DAppServiceTests
         {
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
             var product = new DAppOffer
             {
@@ -41,7 +45,7 @@ public class DAppServiceTests
             _dAppRepository .Setup(x => x.CreateDAppOffer(It.IsAny<DAppOffer>())).ReturnsAsync(product);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                    _dAppService.CreateDAppOffer(createProductModel));
+                    _dAppService.CreateDAppOffer(createProductModel, jwt));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
@@ -50,26 +54,32 @@ public class DAppServiceTests
         [Fact]
         public async Task CreateDAppOffer_Success()
         {
+            var userid = Guid.NewGuid();
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
+            const string jwt = "";
 
-            var product = new DAppOffer
+            DAppOffer product = new DAppOffer
             {
                 Title = titleText,
-                Description = descriptionText
+                Description = descriptionText,
+                Provider = new User() { Id = userid }
             };
 
             var createProductModel = new CreateDAppOfferModel
             {
                 Title = titleText,
-                Description = descriptionText
+                Description = descriptionText,
+                Provider = new User(){ Id = userid }
             };
 
-            _dAppRepository .Setup(x => x.CreateDAppOffer(It.IsAny<DAppOffer>())).ReturnsAsync(product);
+            _dAppRepository.Setup(x => x.CreateDAppOffer(It.IsAny<DAppOffer>())).ReturnsAsync(product);
+            _jwtIdClaimReaderHelper.Setup(x => x.getUserIdFromToken(jwt)).Returns(userid);
 
-            var result = await _dAppService.CreateDAppOffer(createProductModel);
 
-            Assert.Equal(product.Title, result.Title);
+            var result = await _dAppService.CreateDAppOffer(createProductModel, jwt);
+
+            Assert.Equal(titleText, result.Title);
         }
 
         [Fact]
@@ -78,6 +88,7 @@ public class DAppServiceTests
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
+            const string jwt = "";
 
             var product = new DAppOffer
             {
@@ -103,7 +114,7 @@ public class DAppServiceTests
                 x.UpdateDAppOffer(product.Id, product)).ReturnsAsync(updatedProduct);
 
             var result = await Assert.ThrowsAsync<EmptyFieldException>(() =>
-                _dAppService.UpdateDAppOffer(product.Id, updateProductModel));
+                _dAppService.UpdateDAppOffer(product.Id, updateProductModel, jwt));
 
             Assert.NotNull(result);
             Assert.IsType<EmptyFieldException>(result);
@@ -115,31 +126,35 @@ public class DAppServiceTests
             const string titleText = "Title Text";
             const string descriptionText = "Description Text";
             var id = Guid.NewGuid();
-
+            var userid = Guid.NewGuid();
+            const string jwt = "";
             var product = new DAppOffer
             {
                 Id = id,
                 Title = titleText,
-                Description = descriptionText
+                Description = descriptionText,
+                Provider = new User() { Id = userid }
             };
 
             var updatedProduct = new DAppOffer
             {
                 Id = id,
                 Title = "New Title",
-                Description = "New Description"
+                Description = "New Description",
+                Provider = new User() { Id = userid}
             };
 
             var updateProductModel = new UpdateDAppOfferModel
             {
                 Title = updatedProduct.Title,
-                Description = updatedProduct.Description
+                Description = updatedProduct.Description,
             };
-            _dAppRepository .Setup(x => x.GetDAppOffer(product.Id)).ReturnsAsync(product);
-            _dAppRepository .Setup(x =>
-                x.UpdateDAppOffer(product.Id, product)).ReturnsAsync(updatedProduct);
+            _dAppRepository.Setup(x => x.GetDAppOffer(product.Id)).ReturnsAsync(product);
+            _dAppRepository.Setup(x =>
+               x.UpdateDAppOffer(product.Id, product)).ReturnsAsync(updatedProduct);
+            _jwtIdClaimReaderHelper.Setup(x => x.getUserIdFromToken(jwt)).Returns(userid);
 
-            var result = await _dAppService.UpdateDAppOffer(product.Id, updateProductModel);
+            var result = await _dAppService.UpdateDAppOffer(product.Id, updateProductModel, jwt);
 
             Assert.NotNull(result);
             Assert.Equal(updatedProduct, result);
