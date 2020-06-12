@@ -25,6 +25,13 @@ namespace MarketplaceService.DataTypes
             AddRange(items);
         }
 
+        /// <summary>
+        /// In this method the queryable is being executed in the Take() part. So then the actual items are being returned.
+        /// </summary>
+        /// <param name="source">Queryable</param>
+        /// <param name="pageNumber">the page number</param>
+        /// <param name="pageSize">the amount of items per page</param>
+        /// <returns>Paged list</returns>
         public async static Task<PagedList<T>> ToPagedList(IQueryable<T> source, int pageNumber, int pageSize)
         {
             var count = source.Count();

@@ -36,8 +36,8 @@ namespace MarketplaceService.Services
         /// <summary>
         /// Gets filtered list
         /// </summary>
-        /// <param name="getOfferModel"> filter options</param>
+        /// <param name="getDelegateOfferModel"> filter options</param>
         /// <returns>filtered pagedlist</returns>
-        Task<PagedList<DelegateOffer>> GetOffers(GetOfferModel getOfferModel);
+        Task<PagedList<DelegateOffer>> GetOffers(GetDelegateOfferModel getDelegateOfferModel);
     }
 }

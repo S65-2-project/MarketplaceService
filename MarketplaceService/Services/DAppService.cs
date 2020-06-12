@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using marketplaceservice.Exceptions;
 using marketplaceservice.Helpers;
+using MarketplaceService.DataTypes;
+
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
 using MarketplaceService.Models;
@@ -118,6 +120,11 @@ namespace MarketplaceService.Services
                 throw new NotAuthenticatedException();
             }
             await _dAppRepository.DeleteDAppOffer(id);
+        }
+
+        public async Task<PagedList<DAppOffer>> GetOffers(GetDAppOfferModel getDAppOfferModel)
+        {
+            return await _dAppRepository.GetAllDAppOffers(getDAppOfferModel);
         }
     }
 }
