@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using marketplaceservice.Exceptions;
+using marketplaceservice.Helpers;
 using MarketplaceService.DataTypes;
+
 using MarketplaceService.Domain;
 using MarketplaceService.Exceptions;
 using MarketplaceService.Models;
@@ -12,13 +15,15 @@ namespace MarketplaceService.Services
     public class DAppService : IDAppService
     {
         private readonly IDAppRepository _dAppRepository;
+        private readonly IJwtIdClaimReaderHelper _jwtIdClaimReaderHelper;
 
-        public DAppService(IDAppRepository dAppRepository)
+        public DAppService(IDAppRepository dAppRepository, IJwtIdClaimReaderHelper jwtIdClaimReaderHelper)
         {
             _dAppRepository = dAppRepository;
+            _jwtIdClaimReaderHelper = jwtIdClaimReaderHelper;
         }
         
-        public async Task<DAppOffer> CreateDAppOffer(CreateDAppOfferModel createDAppOfferModel)
+        public async Task<DAppOffer> CreateDAppOffer(CreateDAppOfferModel createDAppOfferModel, string jwt)
         {
             if (string.IsNullOrEmpty(createDAppOfferModel.Title) || string.IsNullOrEmpty(createDAppOfferModel.Description))
                 throw new EmptyFieldException();
@@ -37,6 +42,10 @@ namespace MarketplaceService.Services
                 DateEnd = createDAppOfferModel.DateEnd,
                 DateStart = createDAppOfferModel.DateStart
             };
+            if(offer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
+            {
+                throw new NotAuthenticatedException();
+            }
 
             return await _dAppRepository.CreateDAppOffer(offer);
         }
@@ -46,7 +55,7 @@ namespace MarketplaceService.Services
             return await _dAppRepository.GetDAppOffer(id);
         }
 
-        public async Task<DAppOffer> UpdateDAppOffer(Guid id, UpdateDAppOfferModel updateDAppOfferModel)
+        public async Task<DAppOffer> UpdateDAppOffer(Guid id, UpdateDAppOfferModel updateDAppOfferModel, string jwt)
         {
             if (string.IsNullOrEmpty(updateDAppOfferModel.Title) || string.IsNullOrEmpty(updateDAppOfferModel.Description))
                 throw new EmptyFieldException();
@@ -63,19 +72,33 @@ namespace MarketplaceService.Services
             offer.DateStart = updateDAppOfferModel.DateStart;
             offer.DateEnd = updateDAppOfferModel.DateEnd;
 
+            if (offer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
+            {
+                throw new NotAuthenticatedException();
+            }
+
             return await _dAppRepository.UpdateDAppOffer(id, offer);
         }
 
-        public async Task<DAppOffer> AddDelegateToDAppOffer(Guid id, User user)
+        public async Task<DAppOffer> AddDelegateToDAppOffer(Guid id, User user, string jwt)
         {
+            if(user.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
+            {
+                throw new NotAuthenticatedException();
+            }
             var offerIn = await GetDAppOffer(id);
             offerIn.DelegatesCurrentlyInOffer.Add(user);
 
             return await _dAppRepository.AddDelegateToDAppOffer(id, offerIn);
         }
 
-        public async Task<DAppOffer> RemoveDelegateFromDAppOffer(Guid id, User user)
+        public async Task<DAppOffer> RemoveDelegateFromDAppOffer(Guid id, User user, string jwt)
         {
+            if (user.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
+            {
+                throw new NotAuthenticatedException();
+            }
+
             var offerIn = await GetDAppOffer(id);
             try
             {
@@ -89,8 +112,13 @@ namespace MarketplaceService.Services
             return await _dAppRepository.RemoveDelegateFromDAppOffer(id, offerIn);
         }
 
-        public async Task DeleteDAppOffer(Guid id)
+        public async Task DeleteDAppOffer(Guid id, string jwt)
         {
+            var offer = await _dAppRepository.GetDAppOffer(id);
+            if(offer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
+            {
+                throw new NotAuthenticatedException();
+            }
             await _dAppRepository.DeleteDAppOffer(id);
         }
 

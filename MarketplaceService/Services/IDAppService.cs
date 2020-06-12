@@ -13,7 +13,7 @@ namespace MarketplaceService.Services
         /// </summary>
         /// <param name="createDAppOfferModel"></param>
         /// <returns>DAppOffer</returns>
-        Task<DAppOffer> CreateDAppOffer(CreateDAppOfferModel createDAppOfferModel);
+        Task<DAppOffer> CreateDAppOffer(CreateDAppOfferModel createDAppOfferModel, string jwt);
         
         /// <summary>
         /// Gets a DAppOffer by id
@@ -28,7 +28,7 @@ namespace MarketplaceService.Services
         /// <param name="id"></param>
         /// <param name="updateDAppOfferModel"></param>
         /// <returns>DAppOffer</returns>
-        Task<DAppOffer> UpdateDAppOffer(Guid id, UpdateDAppOfferModel updateDAppOfferModel);
+        Task<DAppOffer> UpdateDAppOffer(Guid id, UpdateDAppOfferModel updateDAppOfferModel, string jwt);
         
         /// <summary>
         /// Updates a DAppOffer
@@ -36,7 +36,7 @@ namespace MarketplaceService.Services
         /// <param name="id"></param>
         /// <param name="userIn"></param>
         /// <returns>DAppOffer</returns>
-        Task<DAppOffer> RemoveDelegateFromDAppOffer(Guid id, User userIn);
+        Task<DAppOffer> RemoveDelegateFromDAppOffer(Guid id, User userIn ,string jwt);
         
         /// <summary>
         /// Updates a DAppOffer
@@ -44,13 +44,14 @@ namespace MarketplaceService.Services
         /// <param name="id"></param>
         /// <param name="userOut"></param>
         /// <returns>DAppOffer</returns>
-        Task<DAppOffer> AddDelegateToDAppOffer(Guid id, User userOut);
+        Task<DAppOffer> AddDelegateToDAppOffer(Guid id, User userOut, string jwt);
         
         /// <summary>
         /// Deletes a DAppOffer
         /// </summary>
         /// <param name="id"></param>
-        Task DeleteDAppOffer(Guid id);
+        Task DeleteDAppOffer(Guid id, string jwt);
+
         /// <summary>
         /// Gets offers that comply with filters
         /// </summary>
