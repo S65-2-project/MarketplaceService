@@ -41,7 +41,7 @@ namespace MarketplaceService.Services
             var id = _jwtIdClaimReaderHelper.getUserIdFromToken(jwt);
             if (delegateOffer.Provider.Id != id)
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
 
             return await _delegateRepository.CreateDelegateOffer(delegateOffer);
@@ -60,7 +60,7 @@ namespace MarketplaceService.Services
             var delegateOffer = await GetDelegateOffer(id);
             if(delegateOffer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
             delegateOffer.Id = id;
             delegateOffer.Title = updateDelegateOfferModel.Title;
@@ -77,7 +77,7 @@ namespace MarketplaceService.Services
             var offer = await _delegateRepository.GetDelegateOffer(id);
             if(offer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
             await _delegateRepository.DeleteDelegateOffer(id);
         }

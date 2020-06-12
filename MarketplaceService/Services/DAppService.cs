@@ -42,7 +42,7 @@ namespace MarketplaceService.Services
             };
             if(offer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
 
             return await _dAppRepository.CreateDAppOffer(offer);
@@ -72,7 +72,7 @@ namespace MarketplaceService.Services
 
             if (offer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
 
             return await _dAppRepository.UpdateDAppOffer(id, offer);
@@ -82,7 +82,7 @@ namespace MarketplaceService.Services
         {
             if(user.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
             var offerIn = await GetDAppOffer(id);
             offerIn.DelegatesCurrentlyInOffer.Add(user);
@@ -94,7 +94,7 @@ namespace MarketplaceService.Services
         {
             if (user.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
 
             var offerIn = await GetDAppOffer(id);
@@ -115,7 +115,7 @@ namespace MarketplaceService.Services
             var offer = await _dAppRepository.GetDAppOffer(id);
             if(offer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))//authorization
             {
-                throw new NotAuthorisedException();
+                throw new NotAuthenticatedException();
             }
             await _dAppRepository.DeleteDAppOffer(id);
         }

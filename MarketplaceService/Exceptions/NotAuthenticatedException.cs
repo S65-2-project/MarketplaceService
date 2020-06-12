@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace marketplaceservice.Exceptions
 {
-    public class NotAuthorisedException : Exception
+    public class NotAuthenticatedException : Exception
     {
-        public NotAuthorisedException() : base("You are not authorised to do this") { }
+        public NotAuthenticatedException() : base("You are not authenticated to do this") { }
     }
 }
