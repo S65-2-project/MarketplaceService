@@ -4,7 +4,7 @@ metadata:
   labels:
     app: marketplace-service
   name: marketplace-service
-  namespace: s652
+  namespace: s652-develop
 spec:
   replicas: 1
   selector:
