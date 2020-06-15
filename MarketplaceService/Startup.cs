@@ -1,4 +1,3 @@
-using System;
 using MarketplaceService.DatastoreSettings;
 using MarketplaceService.Repositories;
 using MarketplaceService.Services;
@@ -32,31 +31,30 @@ namespace MarketplaceService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             // jwt settings
             var jwtSettingsSection = Configuration.GetSection("JwtSettings");
             services.Configure<JwtSettings>(jwtSettingsSection);
-            
+
             var appSettings = jwtSettingsSection.Get<JwtSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.SecretJWT);
             services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                };
-            });
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                    };
+                });
 
             //DatabaseSettings
             services.Configure<MarketplaceDatabaseSettings>(
@@ -78,16 +76,16 @@ namespace MarketplaceService
             //Message Consumer
             services.AddMessageConsumer(Configuration["MessageQueueSettings:Uri"],
                 "MarketplaceService",
-                builder => builder.WithHandler<DeleteUserMessageHandler>("delete-user").WithHandler<UpdateUserMessageHandler>("update-user"));
+                builder => builder.WithHandler<DeleteUserMessageHandler>("delete-user")
+                    .WithHandler<UpdateUserMessageHandler>("update-user"));
             services.AddCors();
-            
+
             services.AddHealthChecks().AddCheck("healthy", () => HealthCheckResult.Healthy());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseCors(x => x
@@ -105,8 +103,8 @@ namespace MarketplaceService
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
-            app.UseHealthChecks("/", new HealthCheckOptions 
+
+            app.UseHealthChecks("/", new HealthCheckOptions
             {
                 Predicate = r => r.Name.Contains("healthy")
             });

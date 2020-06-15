@@ -23,9 +23,11 @@ namespace MarketplaceService.Services
             _jwtIdClaimReaderHelper = jwtIdClaimReaderHelper;
         }
 
-        public async Task<DelegateOffer> CreateDelegateOffer(CreateDelegateOfferModel creatDelegateOfferModel, string jwt)
+        public async Task<DelegateOffer> CreateDelegateOffer(CreateDelegateOfferModel creatDelegateOfferModel,
+            string jwt)
         {
-            if (string.IsNullOrEmpty(creatDelegateOfferModel.Title) || string.IsNullOrEmpty(creatDelegateOfferModel.Description))
+            if (string.IsNullOrEmpty(creatDelegateOfferModel.Title) ||
+                string.IsNullOrEmpty(creatDelegateOfferModel.Description))
                 throw new EmptyFieldException();
 
             var delegateOffer = new DelegateOffer
@@ -52,16 +54,19 @@ namespace MarketplaceService.Services
             return await _delegateRepository.GetDelegateOffer(id);
         }
 
-        public async Task<DelegateOffer> UpdateDelegateOffer(Guid id, UpdateDelegateOfferModel updateDelegateOfferModel, string jwt)
+        public async Task<DelegateOffer> UpdateDelegateOffer(Guid id, UpdateDelegateOfferModel updateDelegateOfferModel,
+            string jwt)
         {
-            if (string.IsNullOrEmpty(updateDelegateOfferModel.Title) || string.IsNullOrEmpty(updateDelegateOfferModel.Description))
+            if (string.IsNullOrEmpty(updateDelegateOfferModel.Title) ||
+                string.IsNullOrEmpty(updateDelegateOfferModel.Description))
                 throw new EmptyFieldException();
 
             var delegateOffer = await GetDelegateOffer(id);
-            if(delegateOffer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
+            if (delegateOffer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
             {
                 throw new NotAuthenticatedException();
             }
+
             delegateOffer.Id = id;
             delegateOffer.Title = updateDelegateOfferModel.Title;
             delegateOffer.Description = updateDelegateOfferModel.Description;
@@ -75,10 +80,11 @@ namespace MarketplaceService.Services
         public async Task DeleteDelegateOffer(Guid id, string jwt)
         {
             var offer = await _delegateRepository.GetDelegateOffer(id);
-            if(offer.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
+            if (offer.Provider.Id != _jwtIdClaimReaderHelper.getUserIdFromToken(jwt))
             {
                 throw new NotAuthenticatedException();
             }
+
             await _delegateRepository.DeleteDelegateOffer(id);
         }
 
