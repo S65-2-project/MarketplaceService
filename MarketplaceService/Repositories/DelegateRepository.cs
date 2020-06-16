@@ -83,7 +83,7 @@ namespace MarketplaceService.Repositories
             var listProvidersWithId = await _delegateOffers.Find(offer => offer.Provider.Id == id).ToListAsync();
             foreach (var _delegate in listProvidersWithId)
             {
-                _delegate.Provider.Name = newEmail;
+                _delegate.Provider.Email = newEmail;
                 await UpdateDelegateOffer(_delegate.Id, _delegate);
             }
         }
