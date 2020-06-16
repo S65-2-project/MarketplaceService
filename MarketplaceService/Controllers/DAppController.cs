@@ -51,7 +51,7 @@ namespace MarketplaceService.Controllers
         [Authorize]
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IActionResult> DeleteDAppOffer(Guid id,[FromHeader(Name = "Authorization")] string jwt)
+        public async Task<IActionResult> DeleteDAppOffer(Guid id, [FromHeader(Name = "Authorization")] string jwt)
         {
             try
             {
