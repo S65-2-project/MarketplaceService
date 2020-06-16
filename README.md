@@ -1,9 +1,9 @@
 # MarketplaceService
-This is the marcketplace of the Lisk delegate market project. It was made as a groupproject for Fontys. 
+This is the marketplace of the Lisk delegate market project. It was made as a groupproject for Fontys. 
 
 It was made with .NET Core 3.1 and will function as an API for the Lisk Delegate Market. To make fully use of the API it is recommened to also look at the other services in the project. The other services can be found [here](https://github.com/S65-2-project). If you want to see the live product it can be found [here](https://delegate-market.nl).
 
-Via this service users can register on the platform, log in and update their profile if they want to. It also takes care of creating new JWT. 
+Via this service users can create, update and delete delegate en dapp offers on the marketplace.
 
 ## External sources
 To run this project you will need to run the following services:
@@ -65,7 +65,7 @@ To reproduce the Pipeline the following secrets are needed:
 - SONARCLOUD_ACCESS_TOKEN : The access token for sonarcloud
 
 ## Delivery
-All the images are stored on DockerHub. These are also on a public repo and can be found [here](https://hub.docker.com/repository/docker/s652/account-service).
+All the images are stored on DockerHub. These are also on a public repo and can be found [here](https://hub.docker.com/repository/docker/s652/marketplace-service).
 All images with a SHA tag are development builds and versions with a version tag are production builds. 
 
 ## Deployment
