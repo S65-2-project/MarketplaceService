@@ -102,14 +102,14 @@ namespace MarketplaceService.Repositories
             var listWithDelegatesInOfferWithID = await _dAppOffers.Find(offer => offer.DelegatesCurrentlyInOffer.Exists(user => user.Id == id)).ToListAsync();
             foreach(var dapp in listWithDelegatesInOfferWithID)
             {
-                dapp.DelegatesCurrentlyInOffer.Find(user => user.Id == id).Name = newEmail;
+                dapp.DelegatesCurrentlyInOffer.Find(user => user.Id == id).Email = newEmail;
                 await UpdateDAppOffer(dapp.Id, dapp);
             }
 
             var listProvidersWithId = await _dAppOffers.Find(offer => offer.Provider.Id == id).ToListAsync();
             foreach(var dapp in listProvidersWithId)
             {
-                dapp.Provider.Name = newEmail;
+                dapp.Provider.Email = newEmail;
                 await UpdateDAppOffer(dapp.Id, dapp);
             }
         }
